@@ -1,4 +1,4 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.recipe;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

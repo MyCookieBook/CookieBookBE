@@ -1,10 +1,12 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.recipe;
 
 import org.springframework.web.bind.annotation.*;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:4200" )
 public class RecipeController {
 
-	RecipeRepository recipeRepository; 
+	RecipeRepository recipeRepository;
 	
 	public RecipeController(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;

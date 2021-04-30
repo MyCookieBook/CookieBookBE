@@ -1,38 +1,44 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.user;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 @RestController
+@Slf4j
+@CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
     UserRepository userRepository;
     @PostMapping("/users/register")
-    public Status registerUser(@Valid @RequestBody User newUser) {
+    public long registerUser(@Valid @RequestBody User newUser) { // UserId als String mitgegeben ans Frontend
         List<User> users = userRepository.findAll();
         System.out.println("New user: " + newUser.toString());
         for (User user : users) {
             System.out.println("Registered user: " + newUser.toString());
             if (user.equals(newUser)) {
                 System.out.println("User Already exists!");
-                return Status.USER_ALREADY_EXISTS;
+                log.warn(Status.USER_ALREADY_EXISTS.toString());
+                return Status.USER_ALREADY_EXISTS.getStatuscode();
             }
         }
         userRepository.save(newUser);
-        return Status.SUCCESS;
+        log.info(Status.SUCCESS.toString());
+        return newUser.getId();
     }
+
     @PostMapping("/users/login")
-    public Status loginUser(@Valid @RequestBody User user) {
+    public long loginUser(@Valid @RequestBody User user) { // UserId als String mitgegeben ans Frontend
         List<User> users = userRepository.findAll();
         for (User other : users) {
             if (other.equals(user)) {
                 user.setLoggedIn(true);
                 userRepository.save(user);
-                return Status.SUCCESS;
+                return user.getId();
             }
         }
-        return Status.FAILURE;
+        return Status.FAILURE.getStatuscode();
     }
     @PostMapping("/users/logout")
     public Status logUserOut(@Valid @RequestBody User user) {
@@ -45,5 +51,10 @@ public class UserController {
             }
         }
         return Status.FAILURE;
+    }
+
+    @GetMapping("/userlist")
+    public List<User> getUsers(){
+        return userRepository.findAll();
     }
 }
