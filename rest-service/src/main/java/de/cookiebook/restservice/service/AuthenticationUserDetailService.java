@@ -14,7 +14,8 @@ public class AuthenticationUserDetailService implements UserDetailsService {
         this.userService = userService;
     }
 
-    @Override public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userService.readUserByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException(email);

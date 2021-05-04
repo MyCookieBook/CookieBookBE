@@ -13,7 +13,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User readUserByEmail (String email) {
+    public User readUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(EntityNotFoundException::new);
     }
 }

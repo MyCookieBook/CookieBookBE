@@ -22,7 +22,7 @@ public class User {
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
 
-    public User(@NotBlank String email, 
+    public User(@NotBlank String email,
                 @NotBlank String password) {
         this.email = email;
         this.password = password;
@@ -37,11 +37,13 @@ public class User {
         return Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, 
-                            loggedIn);
+        return Objects.hash(id, email, password,
+                loggedIn);
     }
+
     @Override
     public String toString() {
         return "User{" +

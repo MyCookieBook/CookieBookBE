@@ -21,7 +21,10 @@ public class Recipe {
     private String nutritionalValues;
     private String otherInformation;
 
-    public Recipe(){};
+    public Recipe() {
+    }
+
+    ;
 
     public Recipe(String title) {
         this.title = title;
@@ -75,38 +78,38 @@ public class Recipe {
     public void setTitle(String title) {
         this.title = title;
     }
-    
-	public int getDifficultyLevel() {
-		return difficultyLevel;
-	}
 
-	public void setDifficultyLevel(int difficultyLevel) {
-		this.difficultyLevel = difficultyLevel;
-	}
-	
-	public String getLink() {
-		return link;
-	}
+    public int getDifficultyLevel() {
+        return difficultyLevel;
+    }
 
-	public void setLink(String link) {
-		this.link = link;
-	}
+    public void setDifficultyLevel(int difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
 
-	public String getNutritionalValues() {
-		return nutritionalValues;
-	}
+    public String getLink() {
+        return link;
+    }
 
-	public void setNutritionalValues(String nutritionalValues) {
-		this.nutritionalValues = nutritionalValues;
-	}
+    public void setLink(String link) {
+        this.link = link;
+    }
 
-	public String getOtherInformation() {
-		return otherInformation;
-	}
+    public String getNutritionalValues() {
+        return nutritionalValues;
+    }
 
-	public void setOtherInformation(String otherInformation) {
-		this.otherInformation = otherInformation;
-	}
+    public void setNutritionalValues(String nutritionalValues) {
+        this.nutritionalValues = nutritionalValues;
+    }
+
+    public String getOtherInformation() {
+        return otherInformation;
+    }
+
+    public void setOtherInformation(String otherInformation) {
+        this.otherInformation = otherInformation;
+    }
 
     @Override
     public String toString() {

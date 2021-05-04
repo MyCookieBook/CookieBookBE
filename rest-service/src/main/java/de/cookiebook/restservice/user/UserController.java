@@ -3,14 +3,21 @@ package de.cookiebook.restservice.user;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.List;
+
 @RestController
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     @Autowired
     UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @PostMapping("/users/register")
     public long registerUser(@Valid @RequestBody User newUser) { // UserId als String mitgegeben ans Frontend
         List<User> users = userRepository.findAll();
@@ -40,6 +47,7 @@ public class UserController {
         }
         return Status.FAILURE.getStatuscode();
     }
+
     @PostMapping("/users/logout")
     public Status logUserOut(@Valid @RequestBody User user) {
         List<User> users = userRepository.findAll();
@@ -51,10 +59,11 @@ public class UserController {
             }
         }
         return Status.FAILURE;
+        // delete Token !!!
     }
 
     @GetMapping("/userlist")
-    public List<User> getUsers(){
+    public List<User> getUsers() {
         return userRepository.findAll();
     }
 }
