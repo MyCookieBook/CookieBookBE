@@ -1,23 +1,26 @@
 package de.cookiebook.restservice.service;
 
 import de.cookiebook.restservice.user.User;
+import de.cookiebook.restservice.user.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+@Service
 public class AuthenticationUserDetailService implements UserDetailsService {
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public AuthenticationUserDetailService(UserService userService) {
-        this.userService = userService;
+    public AuthenticationUserDetailService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userService.readUserByEmail(email);
+        User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException(email);
+            throw new UsernameNotFoundException("User with email " + email + " not found");
         }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), Collections.emptyList());
     }
