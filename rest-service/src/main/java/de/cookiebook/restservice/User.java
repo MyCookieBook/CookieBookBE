@@ -12,7 +12,19 @@ public class User {
     private @Id @GeneratedValue long id;
     private @NotBlank String email;
     private @NotBlank String password;
-    private @NotBlank boolean loggedIn;
+    private @NotBlank boolean loggedIn; 
+    /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen, 
+     * weil das soll ja nicht von außen gesetzt werden können, sondern nur bei erfolgreicher Anmeldung.
+     */
+    
+    /*
+     * beim einloggen User-ID 
+     * Fehlermeldung übergeben, z.b. mit den Zahlenwerten zurückgeben "ID=40 Fehler aufgetreten"
+     * 4x freilassen für die ID wegen der Fehlermeldung
+     * Fehler abfangen 
+     *   
+     */
+    
     public User() {
     }
     public User(@NotBlank String email, 
