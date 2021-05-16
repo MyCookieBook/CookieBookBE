@@ -1,59 +1,50 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
+
+@Setter
+@Getter
 @Entity
+@NoArgsConstructor
 @Table(name = "users")
 public class User {
-    private @Id @GeneratedValue long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
     private @NotBlank String email;
     private @NotBlank String password;
-    private @NotBlank boolean loggedIn; 
-    /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen, 
+    private @NotBlank boolean loggedIn;
+
+    private @NotBlank boolean loggedIn;
+
+    /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen,
      * weil das soll ja nicht von außen gesetzt werden können, sondern nur bei erfolgreicher Anmeldung.
      */
-    
+
     /*
-     * beim einloggen User-ID 
+     * beim einloggen User-ID
      * Fehlermeldung übergeben, z.b. mit den Zahlenwerten zurückgeben "ID=40 Fehler aufgetreten"
      * 4x freilassen für die ID wegen der Fehlermeldung
-     * Fehler abfangen 
-     *   
+     * Fehler abfangen
+     *
      */
-    
+
     public User() {
     }
-    public User(@NotBlank String email, 
+    public User(@NotBlank String email,
                 @NotBlank String password) {
         this.email = email;
         this.password = password;
         this.loggedIn = false;
     }
-    public long getId() {
-        return id;
-    }
-    public String getEmail() {
-        return email;
-    }
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    public boolean isLoggedIn() {
-        return loggedIn;
-    }
-    public void setLoggedIn(boolean loggedIn) {
-        this.loggedIn = loggedIn;
-    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

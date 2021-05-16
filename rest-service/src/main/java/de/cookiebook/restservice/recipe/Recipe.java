@@ -1,4 +1,4 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.recipe;
 
 import java.util.ArrayList;
 import java.util.List;
