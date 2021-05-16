@@ -87,25 +87,25 @@ title __REST-SERVICE's Class Diagram__\n
   
 
   namespace de.cookiebook.restservice {
-    class de.cookiebook.restservice.Tag {
+    class de.cookiebook.restservice.tags.Tag {
     }
   }
   
 
   namespace de.cookiebook.restservice {
-    class de.cookiebook.restservice.Tag {
+    class de.cookiebook.restservice.tags.Tag {
     }
   }
   
 
   namespace de.cookiebook.restservice {
-    interface de.cookiebook.restservice.TagRepository {
+    interface de.cookiebook.restservice.tags.TagRepository {
     }
   }
   
 
   namespace de.cookiebook.restservice {
-    interface de.cookiebook.restservice.TagRepository {
+    interface de.cookiebook.restservice.tags.TagRepository {
     }
   }
   

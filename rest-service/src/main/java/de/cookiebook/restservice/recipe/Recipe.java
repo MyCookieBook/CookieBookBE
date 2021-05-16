@@ -1,5 +1,11 @@
 package de.cookiebook.restservice.recipe;
 
+import de.cookiebook.restservice.category.Category;
+import de.cookiebook.restservice.tags.Tag;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +22,10 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
-
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "recipes3")
 public class Recipe {
 /* To do: Objekte implementieren
@@ -34,7 +42,7 @@ public class Recipe {
     private String ingredients; 
     private String material;
     private String steps;
-    private Category category; // to do 
+    private Category category; // to do
     private String link;
     @Column(nullable = true)
     private Integer calories;
@@ -53,16 +61,6 @@ public class Recipe {
   * Der Text der Beziehung zwischen username und recipe wird im FE zusammengebaut. (Cheesecake by @RitterSchlagedrein)
   * Pflichtfelder werden im FE geprüft
   */
-
-    public Recipe(){};
-
-    public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public void setDuration(int duration) {
-		this.duration = duration;
-	}
 
 	public Recipe(	String title, 
     				Integer duration, 
@@ -89,84 +87,8 @@ public class Recipe {
         this.category = category;
     }
 
-    public void setIngredients(String ingredients) {
-		this.ingredients = ingredients;
-	}
-
-	public void setMaterial(String material) {
-		this.material = material;
-	}
-
-	public void setSteps(String steps) {
-		this.steps = steps;
-	}
-
-	public void setCategory(Category category) {
-		this.category = category;
-	}
-
-	public void setLink(String link) {
-		this.link = link;
-	}
-
-	public void setCalories(int calories) {
-		this.calories = calories;
-	}
-
-	public void setTags(List<Tag> tags) {
-		this.tags = tags;
-	}
-	
 	public void addTag(Tag tag) {
 		this.tags.add(tag);
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public int getDuration() {
-		return duration;
-	}
-
-	public int getDifficultyLevel() {
-		return difficultyLevel;
-	}
-
-	public String getIngredients() {
-		return ingredients;
-	}
-
-	public String getMaterial() {
-		return material;
-	}
-
-	public String getSteps() {
-		return steps;
-	}
-
-	public Category getCategory() {
-		return category;
-	}
-
-	public String getLink() {
-		return link;
-	}
-
-	public int getCalories() {
-		return calories;
-	}
-
-	public String getOtherInformation() {
-		return otherInformation;
-	}
-
-	public List<Tag> getTags() {
-		return tags;
 	}
 
 	@Override
@@ -193,14 +115,6 @@ public class Recipe {
                 tagString +
                 '}';
     }
-
-	public void setDifficultyLevel(int difficultyLevel) {
-		this.difficultyLevel = difficultyLevel;
-	}
-
-	public void setOtherInformation(String otherInformation) {
-		this.otherInformation = otherInformation;
-	}
 
 }
 

@@ -1,5 +1,7 @@
-package de.cookiebook.restservice;
+package de.cookiebook.restservice.tags;
 
+
+import de.cookiebook.restservice.recipe.Recipe;
 
 import java.util.ArrayList;
 import java.util.Collections;

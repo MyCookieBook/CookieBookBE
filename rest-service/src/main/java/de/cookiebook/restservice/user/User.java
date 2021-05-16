@@ -22,8 +22,6 @@ public class User {
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
 
-    private @NotBlank boolean loggedIn;
-
     /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen,
      * weil das soll ja nicht von außen gesetzt werden können, sondern nur bei erfolgreicher Anmeldung.
      */
@@ -36,8 +34,6 @@ public class User {
      *
      */
 
-    public User() {
-    }
     public User(@NotBlank String email,
                 @NotBlank String password) {
         this.email = email;
