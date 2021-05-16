@@ -34,7 +34,13 @@ public class UserController {
         }
         return Status.FAILURE;
     }
-    @PostMapping("/users/logout")
+    @GetMapping("/users")
+    public List<User> getUsers() {
+    	return userRepository.findAll();
+    }
+    
+    
+    @PostMapping("/users/logout") // cookies/token setzen, server validierung austauschen
     public Status logUserOut(@Valid @RequestBody User user) {
         List<User> users = userRepository.findAll();
         for (User other : users) {
