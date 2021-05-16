@@ -24,12 +24,8 @@ public class UserController {
     AuthenticationUserDetailService authenticationUserDetailService;
     JWTTokenUtil jwtTokenUtil;
 
-    /**
-     * Zhibek fragen was genau in der Methode alles in der Datenbank gemacht wird
-     * Zhibek soll es ausführen am besten mit Postman , da bei mir immer 403 Forbidden error geworfen wurde
-     */
     @PostMapping("/users/register")
-    public long registerUser(@Valid @RequestBody User newUser) { // UserId als String mitgegeben ans Frontend
+    public long registerUser(@Valid @RequestBody User newUser) {
         List<User> users = userRepository.findAll();
         log.info("test1");
         System.out.println("New user: " + newUser.toString());
@@ -51,7 +47,7 @@ public class UserController {
 
     //    User body muss email und password beinhalten
     @PostMapping("/users/login")
-    public long loginUser(@Valid @RequestBody User user) { // UserId als String mitgegeben ans Frontend
+    public long loginUser(@Valid @RequestBody User user) {
         try {
             List<User> users = userRepository.findAll();
             for (User other : users) {
@@ -60,13 +56,12 @@ public class UserController {
                     log.info(String.valueOf(other.getId()));
                     other.setLoggedIn(true);
                     userRepository.save(other);
-//                    String username = authenticationLogin(user);
-//
-//                    if (user.isLoggedIn()) {
-//                        UserDetails userDetails = authenticationUserDetailService.loadUserByUsername(username);
-//                        final String token = jwtTokenUtil.generateToken(userDetails);
-//                        return ResponseEntity.ok(new JWTAuthenticationResponse(token));
-//                    }
+                    String username = authenticationLogin(user);
+
+                    if (user.isLoggedIn()) {
+                        UserDetails userDetails = authenticationUserDetailService.loadUserByUsername(username);
+                        final String token = jwtTokenUtil.generateToken(userDetails);
+                    }
 
                     return other.getId();
                 }
