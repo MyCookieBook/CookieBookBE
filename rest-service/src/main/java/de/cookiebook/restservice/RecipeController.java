@@ -1,6 +1,5 @@
 package de.cookiebook.restservice;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,8 @@ public class RecipeController {
 	RecipeRepository recipeRepository; 
 	@Autowired
 	TagRepository tagRepository;
+	@Autowired
+	Service service;
 	
 	public RecipeController(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
@@ -48,7 +49,7 @@ public class RecipeController {
 	// Read recipe
 	@GetMapping("/recipes/read")
 	public Recipe readRecipe(@RequestParam("id") Long id, HttpServletResponse response) {
-		Optional<Recipe> recipe = recipeRepository.findById(id);
+		Optional<Recipe> recipe = service.findById(id);
 		if(!recipe.isPresent()) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return null;
