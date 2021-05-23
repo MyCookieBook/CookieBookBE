@@ -93,14 +93,17 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    public void validateDurration(User user) {
+    public boolean validateDurration(User user) {
         try {
             Date expiration = user.getDurration();
             if(!expiration.before(new Date())){
                 logUserOut(user);
+                return false;
             }
+            return true;
         } catch (Exception e) {
             log.error(e.getMessage());
+            return false;
         }
     }
 }
