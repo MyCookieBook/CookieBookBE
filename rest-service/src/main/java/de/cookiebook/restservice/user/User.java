@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.Date;
 import java.util.Objects;
 
 @Setter
@@ -21,6 +22,7 @@ public class User {
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
+    private Date durration;
 
     public User(@NotBlank String email, 
                 @NotBlank String password) {

@@ -2,9 +2,15 @@ package de.cookiebook.restservice.user;
 
 import de.cookiebook.restservice.JWT.JWTAuthenticationResponse;
 import de.cookiebook.restservice.JWT.JWTTokenUtil;
+import de.cookiebook.restservice.config.AuthenticationConfigConstants;
 import de.cookiebook.restservice.service.AuthenticationUserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,13 +18,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
-    @Autowired
     UserRepository userRepository;
     AuthenticationManager authenticationManager;
     AuthenticationUserDetailService authenticationUserDetailService;
@@ -39,6 +46,7 @@ public class UserController {
                 return Status.USER_ALREADY_EXISTS.getStatuscode();
             }
         }
+        newUser.setDurration(new Date(System.currentTimeMillis()+ AuthenticationConfigConstants.EXPIRATION_TIME));
         userRepository.save(newUser);
         log.info(Status.SUCCESS.toString());
         log.info(String.valueOf(newUser.getId()));
@@ -55,14 +63,8 @@ public class UserController {
                     log.info(String.valueOf(user.getId()));
                     log.info(String.valueOf(other.getId()));
                     other.setLoggedIn(true);
+                    other.setDurration(new Date(System.currentTimeMillis()+ AuthenticationConfigConstants.EXPIRATION_TIME));
                     userRepository.save(other);
-                    String username = authenticationLogin(user);
-
-                    if (user.isLoggedIn()) {
-                        UserDetails userDetails = authenticationUserDetailService.loadUserByUsername(username);
-                        final String token = jwtTokenUtil.generateToken(userDetails);
-                    }
-
                     return other.getId();
                 }
             }
@@ -78,7 +80,6 @@ public class UserController {
         List<User> users = userRepository.findAll();
         for (User other : users) {
             if ((other.getEmail()).equals(user.getEmail()) && (other.getPassword()).equals(user.getPassword())) {
-//                Token soll deaktiviert werden deactivateToken() bzw das expire date setzen
                 other.setLoggedIn(false);
                 userRepository.save(other);
                 return Status.SUCCESS;
@@ -92,15 +93,14 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    private String authenticationLogin(@RequestBody User user) {
+    public void validateDurration(User user) {
         try {
-            authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
-        );
-            return user.getEmail();
+            Date expiration = user.getDurration();
+            if(!expiration.before(new Date())){
+                logUserOut(user);
+            }
         } catch (Exception e) {
             log.error(e.getMessage());
-            return "failure";
         }
     }
 }

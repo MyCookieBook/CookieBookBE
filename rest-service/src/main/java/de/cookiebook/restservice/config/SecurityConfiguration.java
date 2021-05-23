@@ -3,7 +3,7 @@ package de.cookiebook.restservice.config;
 import de.cookiebook.restservice.JWT.JWTAuthenticationFilter;
 import de.cookiebook.restservice.JWT.JWTAuthorizationFilter;
 import de.cookiebook.restservice.service.AuthenticationUserDetailService;
-import lombok.val;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,11 +18,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final JwtRequestFilter jwtRequestFilter;
+    private final JWTAuthorizationFilter authorizationFilter;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final AuthenticationUserDetailService authenticationUserDetailService;
 
-    public SecurityConfiguration(BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationUserDetailService authenticationUserDetailService) {
+    public SecurityConfiguration(JWTAuthorizationFilter authorizationFilter, BCryptPasswordEncoder bCryptPasswordEncoder, AuthenticationUserDetailService authenticationUserDetailService) {
+        this.authorizationFilter = authorizationFilter;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.authenticationUserDetailService = authenticationUserDetailService;
     }
@@ -43,11 +44,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JWTAuthenticationFilter(authenticationManager()))
-                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+//                .addFilter(new JWTAuthorizationFilter())
                 // this disables session creation on Spring Security
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter);
+        http.addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
