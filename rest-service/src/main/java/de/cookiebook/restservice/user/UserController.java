@@ -64,17 +64,17 @@ public class UserController {
     }
 
     @PostMapping("/users/logout")
-    public Status logUserOut(@RequestParam(value = "userId") long userId) {
+    public long logUserOut(@RequestParam(value = "userId") long userId) {
         List<User> users = userRepository.findAll();
         for (User other : users) {
             if (other.getId()==userId){
                 other.setLoggedIn(false);
                 other.setDurration(null);
                 userRepository.save(other);
-                return Status.SUCCESS;
+                return Status.SUCCESS.getStatuscode();
             }
         }
-        return Status.FAILURE;
+        return Status.FAILURE.getStatuscode();
     }
 
     @GetMapping("/userlist")
