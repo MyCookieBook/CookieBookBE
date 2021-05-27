@@ -25,7 +25,7 @@ dependencies {
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
 
 	// SpringBoot
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
 //    lombok
@@ -43,8 +43,8 @@ dependencies {
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 
 //	  JWT
-	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-	implementation group: 'com.auth0', name: 'java-jwt', version: '3.1.0'
+//	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+//	implementation group: 'com.auth0', name: 'java-jwt', version: '3.1.0'
 
 //    Spring Boot Test
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {

@@ -1,0 +1,32 @@
+stages:
+  - build
+  - docker
+
+# This file is a template, and might need editing before it works on your project.
+docker-build-master:
+  # Official docker image.
+  title: Building docker image
+  stage: build
+  type: build
+
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA"
+  only:
+    - master
+
+docker-build:
+  # Official docker image.
+  # image: docker.markant.com/cloud-services/utils/base-images/maven:3.6.3-openjdk-14-slim
+  image: docker.mirror.markant.com/docker:stable
+  tags:
+    - KubernetesRunners
+    - Shared
+  stage: build
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA"
+  except:
+    - master

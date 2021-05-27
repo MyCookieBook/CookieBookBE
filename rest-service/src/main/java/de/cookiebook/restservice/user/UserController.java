@@ -1,73 +1,61 @@
 package de.cookiebook.restservice.user;
 
-import de.cookiebook.restservice.JWT.JWTAuthenticationResponse;
-import de.cookiebook.restservice.JWT.JWTTokenUtil;
 import de.cookiebook.restservice.config.AuthenticationConfigConstants;
-import de.cookiebook.restservice.service.AuthenticationUserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
+    @Autowired
     UserRepository userRepository;
-    AuthenticationManager authenticationManager;
-    AuthenticationUserDetailService authenticationUserDetailService;
-    JWTTokenUtil jwtTokenUtil;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/users/register")
-    public long registerUser(@Valid @RequestBody User newUser) {
+    public long registerUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
         List<User> users = userRepository.findAll();
         log.info("test1");
-        System.out.println("New user: " + newUser.toString());
         for (User user : users) {
             log.info("test2");
-            System.out.println("Registered user: " + newUser.toString());
-            if ((user.getEmail()).equals(newUser.getEmail())) {
+            if ((user.getEmail()).equals(email)) {
                 log.info("test3");
                 System.out.println("User Already exists!");
                 log.warn(Status.USER_ALREADY_EXISTS.toString());
                 return Status.USER_ALREADY_EXISTS.getStatuscode();
             }
         }
-        newUser.setDurration(new Date(System.currentTimeMillis()+ AuthenticationConfigConstants.EXPIRATION_TIME));
+        User newUser = new User(email,password);
+        newUser.setDurration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
         userRepository.save(newUser);
         log.info(Status.SUCCESS.toString());
         log.info(String.valueOf(newUser.getId()));
         return newUser.getId();
     }
 
-    //    User body muss email und password beinhalten
+    @CrossOrigin(origins = "http://localhost:4200/login")
     @PostMapping("/users/login")
-    public long loginUser(@Valid @RequestBody User user) {
+    public long loginUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
         try {
             List<User> users = userRepository.findAll();
             for (User other : users) {
-                if ((other.getEmail()).equals(user.getEmail()) && (other.getPassword()).equals(user.getPassword())) {
-                    log.info(String.valueOf(user.getId()));
+                if ((other.getEmail()).equals(email) && (other.getPassword()).equals(password)) {
                     log.info(String.valueOf(other.getId()));
                     other.setLoggedIn(true);
-                    other.setDurration(new Date(System.currentTimeMillis()+ AuthenticationConfigConstants.EXPIRATION_TIME));
+                    other.setDurration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
                     userRepository.save(other);
                     return other.getId();
                 }
             }
+            log.error(String.valueOf(Status.FAILURE.getStatuscode()));
             return Status.FAILURE.getStatuscode();
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -76,11 +64,12 @@ public class UserController {
     }
 
     @PostMapping("/users/logout")
-    public Status logUserOut(@Valid @RequestBody User user) {
+    public Status logUserOut(@RequestParam(value = "userId") long userId) {
         List<User> users = userRepository.findAll();
         for (User other : users) {
-            if ((other.getEmail()).equals(user.getEmail()) && (other.getPassword()).equals(user.getPassword())) {
+            if (other.getId()==userId){
                 other.setLoggedIn(false);
+                other.setDurration(null);
                 userRepository.save(other);
                 return Status.SUCCESS;
             }
@@ -93,11 +82,35 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    @GetMapping("/user")
+    public User getUser(@RequestParam(value = "email") String email){
+        List<User> userlist = userRepository.findAll();
+        for (User user : userlist) {
+            if ((user.getEmail()).equals(email)) {
+                return user;
+            }
+        }
+        return new User();
+    }
+
+    @PostMapping("/changeEmail")
+    public Status changeEmail(@RequestParam(value = "userId") long userId, @RequestParam(value = "email") String email) {
+        List<User> users = userRepository.findAll();
+        for (User other : users) {
+            if (other.getId()==userId){
+                other.setEmail(email);
+                userRepository.save(other);
+                return Status.SUCCESS;
+            }
+        }
+        return Status.FAILURE;
+    }
+
     public void validateDurration(User user) {
         try {
             Date expiration = user.getDurration();
-            if(!expiration.before(new Date())){
-                logUserOut(user);
+            if (!expiration.before(new Date())) {
+                logUserOut(user.getId());
             }
         } catch (Exception e) {
             log.error(e.getMessage());
