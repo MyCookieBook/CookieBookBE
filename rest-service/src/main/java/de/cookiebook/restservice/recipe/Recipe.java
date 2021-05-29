@@ -56,6 +56,13 @@ public class Recipe {
     		  inverseJoinColumns = @JoinColumn(name = "idTag", referencedColumnName = "id"))
     private List<Tag> tags = new ArrayList<Tag>();
     
+    @ManyToMany(cascade = {CascadeType.MERGE })
+    @JoinTable(
+    		  name = "recipe_user", 
+    		  joinColumns = @JoinColumn(name = "idRecipe", referencedColumnName = "id"), 
+    		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))
+    private List<User> bookmarks = new ArrayList<User>();
+    
     
  /*
   * Der Text der Beziehung zwischen username und recipe wird im FE zusammengebaut. (Cheesecake by @RitterSchlagedrein)
@@ -72,6 +79,7 @@ public class Recipe {
     				String otherInformation,
     				String ingredients,
     				List<Tag> tags,
+    				List<User> bookmarks,
     				Category category) {
     	
         this.title = title;
@@ -84,11 +92,20 @@ public class Recipe {
         this.otherInformation = otherInformation;
         this.ingredients = ingredients;
         this.tags = tags;
+        this.bookmarks = bookmarks;
         this.category = category;
     }
 
 	public void addTag(Tag tag) {
 		this.tags.add(tag);
+	}
+	
+	public void addBookmark(User user) {
+		this.bookmarks.add(user);
+	}
+	
+	public void deleteBookmark(User user) {
+		this.bookmarks.delete(user);
 	}
 
 	@Override
@@ -101,7 +118,8 @@ public class Recipe {
     		}
     		tagString += "{id='" + tags.get(i).getId() + "',title='" + tags.get(i).getTitle() + "'}";
     		
-    	}}
+    	}
+    	}
     	tagString += "]";
         return "Recipe{" +
                 "id=" + this.id +

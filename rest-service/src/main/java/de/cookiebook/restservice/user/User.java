@@ -21,6 +21,9 @@ public class User {
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
+    
+	@ManyToMany(mappedBy="bookmarks")
+    private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
 
     /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen,
      * weil das soll ja nicht von außen gesetzt werden können, sondern nur bei erfolgreicher Anmeldung.
@@ -63,4 +66,13 @@ public class User {
                 ", loggedIn=" + loggedIn +
                 '}';
     }
+    
+public void addRecipe(Recipe recipe) {
+		bookmarks.add(recipe);
+		recipe.addBookmark(this);
+	}
+public void deleteRecipe(Recipe recipe) {
+	bookmarks.delete(recipe);
+	recipe.deleteBookmark(this);
+}
 }

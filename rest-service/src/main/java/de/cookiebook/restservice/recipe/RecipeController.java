@@ -25,6 +25,8 @@ public class RecipeController {
     RecipeRepository recipeRepository;
     @Autowired
     TagRepository tagRepository;
+    @Autowired
+    UserRepository userRepository;
 
     public RecipeController(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
@@ -60,7 +62,7 @@ public class RecipeController {
     }
 
     // Edit recipe
-    @PostMapping("/recipes/edit")
+    @PostMapping("/recipes/edit") // das ist doch requestmapping??
     public Recipe editRecipe(@RequestBody Recipe recipe) {
         /*if(recipeRepository.findById(recipe.getId()) == null ||recipe.getTitle() == null ||
                 recipe.getIngredients() == null || recipe.getSteps() == null) {
@@ -86,8 +88,35 @@ public class RecipeController {
     }
 
 
-
     // implement find
-
+    @GetMapping("/recipeslist")
+    public List<Recipe> getRecipes(){
+        return recipeRepository.findAll;
+    }
+    
+    @GetMapping(value = "/recipeslist/byCategory/{Category}")
+    public List<Recipe> getRecipesByCategory(@PathVariable String Category){
+        return recipeRepository.findAllByRecipeCategory( findCategory(Category));
+    }
+    
+    //Bookmark favourite
+    @PostMapping("/recipe/bookmark")
+    public void bookmarkRecipe(@RequestBody Recipe recipe, @RequestBody User user) {
+    	user.addRecipe(recipe);
+    	userRepository.save(user);
+    	recipeRepository.save(recipe);
+    	
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+    // delete bookmark
+    @DeleteMapping("/recipe/deleteBookmark")
+    public void deleteBookmark(@RequestBody Recipe recipe, @RequestBody User user) {
+    	user.deleteBookmark(recipe); // in der user klasse implementieren
+    	userRepository.save(user);
+    	recipeRepository.save(recipe); 
+    
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+    
 }
 	
