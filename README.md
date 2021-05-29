@@ -8,3 +8,5 @@
 ![GitHub Repo stars](https://img.shields.io/github/stars/zhibekbastian/CookieBookBE?style=for-the-badge)
 
 # CookieBookBE
+
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/f5961afff4a54a01903b71498828479c)](https://app.codacy.com/gh/MyCookieBook/CookieBookBE?utm_source=github.com&utm_medium=referral&utm_content=MyCookieBook/CookieBookBE&utm_campaign=Badge_Grade_Settings)
