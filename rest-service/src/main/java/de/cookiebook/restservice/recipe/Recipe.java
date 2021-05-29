@@ -42,11 +42,14 @@ public class Recipe {
     private String ingredients; 
     private String material;
     private String steps;
-    private Category category; // to do
+    
     private String link;
     @Column(nullable = true)
     private Integer calories;
     private String otherInformation;
+    
+    @ManyToOne
+    private Category category; // to do
     
     
     @ManyToMany(cascade = {CascadeType.MERGE })
