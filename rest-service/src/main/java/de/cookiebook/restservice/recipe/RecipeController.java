@@ -14,13 +14,6 @@ import de.cookiebook.restservice.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-/*
- * Endpoints einbauen siehe google drive tab (grün markiert)
- * Edit recipe
- * unterkategorien einbinden
- * Search recipe implementieren nach kategorie und unterkategorie suchen
- *
- */
 @RestController
 @CrossOrigin(origins = "http://localhost:4200" )
 public class RecipeController {
@@ -55,7 +48,7 @@ public class RecipeController {
     }
 
     // Edit recipe
-    @PostMapping("/recipes/edit") // das ist doch requestmapping??
+    @PostMapping("/recipes/edit")
     public Recipe editRecipe(@RequestBody Recipe recipe) {
         recipeRepository.save(recipe);
         System.out.println(recipe);
@@ -84,12 +77,12 @@ public class RecipeController {
     
     @GetMapping(value = "/recipeslist/byCategory/{Category}")
     public List<Recipe> getRecipesByCategory(@PathVariable Category category){
-        return recipeRepository.findAllByRecipeCategory(category);
+        return recipeRepository.findAllByCategory(category);
     }
     
     @GetMapping(value = "/recipeslist/bySubcategory/{Subcategory}")
     public List<Recipe> getRecipesByCategory(@PathVariable Subcategory subcategory){
-        return recipeRepository.findAllByRecipeSubcategory(subcategory);
+        return recipeRepository.findAllBySubcategory(subcategory);
     }
     
     // bookmark favourite

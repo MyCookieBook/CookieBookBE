@@ -27,9 +27,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "recipes3")
 public class Recipe {
-/* To do: Objekte implementieren
- * - category objekt (Kategorien + Unterkategorien sind auf google drive)
- */
     @Id
     @GeneratedValue
     private Long id;
