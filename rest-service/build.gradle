@@ -38,10 +38,6 @@ dependencies {
 //	  Http
 	implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
 
-//    SonarQube
-    compileOnly group: 'org.codehaus.sonar', name: 'sonar-plugin-api', version: '5.1'
-    implementation group: 'org.sonarsource.scanner.gradle', name: 'sonarqube-gradle-plugin', version: '3.2.0'
-
 //    Spring Boot Test
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
 //        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -54,9 +50,6 @@ dependencies {
 //    Cucumber
     testImplementation 'io.cucumber:cucumber-java:6.1.1'
     testImplementation 'io.cucumber:cucumber-junit:6.8.1'
-
-
-
 }
 
 test {
