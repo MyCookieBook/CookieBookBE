@@ -1,0 +1,5 @@
+package de.cookiebook.restservice.category;
+
+public enum Subcategory {
+	APP_SALAD, APP_SOUP, MORSEL, MAIN_SALAD, MAIN_SOUP, MEAT, FISH, VEGAN, VEGETARIAN, CASSEROLE, SIDEDISHES, DOUGH, PASTERIES, COLDDISHES, FRUITSALAD
+}

@@ -71,7 +71,7 @@ public class UserController {
     }
     
     @PostMapping("/users/changePassword")
-    public User changePassword(@Valid @RequestBody User user, @RequestBody String newPassword) {
+    public User changePassword(@Valid @RequestBody User user, @RequestBody String newPassword, HttpServletResponse response) {
     	List<User> users = userRepository.findAll();
     	for (User other : users) {
             if (other.equals(user)) {

@@ -4,9 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
-import de.cookiebook.restservice.tags.Tag;
-import de.cookiebook.restservice.tags.TagRepository;
+import de.cookiebook.restservice.category.Category;
+import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.user.User;
+import de.cookiebook.restservice.user.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,14 +21,11 @@ import org.springframework.web.bind.annotation.*;
  * Search recipe implementieren nach kategorie und unterkategorie suchen
  *
  */
-
 @RestController
 @CrossOrigin(origins = "http://localhost:4200" )
 public class RecipeController {
 
     RecipeRepository recipeRepository;
-    @Autowired
-    TagRepository tagRepository;
     @Autowired
     UserRepository userRepository;
 
@@ -34,15 +35,7 @@ public class RecipeController {
 
     // Add recipe
     @PostMapping("/recipes/add")
-    public Recipe addRecipe(@RequestBody Recipe recipe) {
-        if(recipe.getTags() != null) {
-            List<Tag> tags = recipe.getTags();
-            recipe.getTags().clear();
-            for(int i = 0; i < tags.size(); i++) {
-                tags.get(i).addRecipe(recipe);
-                tagRepository.save(tags.get(i));
-            }
-        }
+    public Recipe addRecipe(@RequestBody Recipe recipe, HttpServletResponse response) {
 
         recipeRepository.save(recipe);
         System.out.println(recipe);
@@ -64,11 +57,6 @@ public class RecipeController {
     // Edit recipe
     @PostMapping("/recipes/edit") // das ist doch requestmapping??
     public Recipe editRecipe(@RequestBody Recipe recipe) {
-        /*if(recipeRepository.findById(recipe.getId()) == null ||recipe.getTitle() == null ||
-                recipe.getIngredients() == null || recipe.getSteps() == null) {
-            System.out.println("Cannot find recipe.");
-            return null;
-        }*/
         recipeRepository.save(recipe);
         System.out.println(recipe);
         return recipe;
@@ -91,17 +79,22 @@ public class RecipeController {
     // implement find
     @GetMapping("/recipeslist")
     public List<Recipe> getRecipes(){
-        return recipeRepository.findAll;
+        return recipeRepository.findAll();
     }
     
     @GetMapping(value = "/recipeslist/byCategory/{Category}")
-    public List<Recipe> getRecipesByCategory(@PathVariable String Category){
-        return recipeRepository.findAllByRecipeCategory( findCategory(Category));
+    public List<Recipe> getRecipesByCategory(@PathVariable Category category){
+        return recipeRepository.findAllByRecipeCategory(category);
     }
     
-    //Bookmark favourite
+    @GetMapping(value = "/recipeslist/bySubcategory/{Subcategory}")
+    public List<Recipe> getRecipesByCategory(@PathVariable Subcategory subcategory){
+        return recipeRepository.findAllByRecipeSubcategory(subcategory);
+    }
+    
+    // bookmark favourite
     @PostMapping("/recipe/bookmark")
-    public void bookmarkRecipe(@RequestBody Recipe recipe, @RequestBody User user) {
+    public void bookmarkRecipe(@RequestBody Recipe recipe, @RequestBody User user, HttpServletResponse response) {
     	user.addRecipe(recipe);
     	userRepository.save(user);
     	recipeRepository.save(recipe);
@@ -110,13 +103,12 @@ public class RecipeController {
     }
     // delete bookmark
     @DeleteMapping("/recipe/deleteBookmark")
-    public void deleteBookmark(@RequestBody Recipe recipe, @RequestBody User user) {
-    	user.deleteBookmark(recipe); // in der user klasse implementieren
+    public void deleteBookmark(@RequestBody Recipe recipe, @RequestBody User user, HttpServletResponse response) {
+    	user.deleteBookmark(recipe);
     	userRepository.save(user);
     	recipeRepository.save(recipe); 
     
         response.setStatus(HttpServletResponse.SC_OK);
     }
-    
 }
 	
