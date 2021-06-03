@@ -6,6 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+
+import java.util.List;
+import de.cookiebook.restservice.recipe.Recipe;
+
+import java.util.ArrayList;
 import java.util.Objects;
 
 @Setter
@@ -21,15 +26,11 @@ public class User {
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
-
-    /* @AllArgsContructor macht keinen Sinn loggedIn per Konstruktor zu setzen,
-     * weil das soll ja nicht von außen gesetzt werden können, sondern nur bei erfolgreicher Anmeldung.
-     */
+    
+	@ManyToMany(mappedBy="bookmarks")
+    private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
 
     /*
-     * beim einloggen User-ID
-     * Fehlermeldung übergeben, z.b. mit den Zahlenwerten zurückgeben "ID=40 Fehler aufgetreten"
-     * 4x freilassen für die ID wegen der Fehlermeldung
      * Fehler abfangen
      *
      */
@@ -63,4 +64,23 @@ public class User {
                 ", loggedIn=" + loggedIn +
                 '}';
     }
+    
+	public void addRecipe(Recipe recipe) {
+		bookmarkRecipes.add(recipe);
+			recipe.addBookmark(this);
+		}
+	public void deleteBookmark(Recipe recipe) {
+		bookmarkRecipes.remove(recipe);
+		recipe.deleteBookmark(this);
+	}
+
+	public void setPassword(String newPassword) {
+		this.password = newPassword;
+		
+	}
+
+	public void setLoggedIn(boolean b) {
+		this.loggedIn = b;
+	}
+
 }

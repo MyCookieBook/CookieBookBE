@@ -1,6 +1,8 @@
 package de.cookiebook.restservice.user;
 
 import lombok.extern.slf4j.Slf4j;
+
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -58,4 +60,27 @@ public class UserController {
     public List<User> getUsers(){
         return userRepository.findAll();
     }
+    
+    // edit profile
+    
+    @PostMapping("/users/edit")
+    public User editProfile(@Valid @RequestBody User user) {
+        userRepository.save(user);
+        System.out.println(user);
+        return user;
+    }
+    
+    @PostMapping("/users/changePassword")
+    public User changePassword(@Valid @RequestBody User user, @RequestBody String newPassword, HttpServletResponse response) {
+    	List<User> users = userRepository.findAll();
+    	for (User other : users) {
+            if (other.equals(user)) {
+                user.setPassword(newPassword);
+                userRepository.save(user);
+                return user;
+            }
+        } 
+    	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+    	return null;  	
+    }   
 }

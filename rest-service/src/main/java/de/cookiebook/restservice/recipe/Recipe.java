@@ -1,7 +1,8 @@
 package de.cookiebook.restservice.recipe;
 
 import de.cookiebook.restservice.category.Category;
-import de.cookiebook.restservice.tags.Tag;
+import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,12 +14,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -28,9 +27,6 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Table(name = "recipes3")
 public class Recipe {
-/* To do: Objekte implementieren
- * - category objekt (Kategorien + Unterkategorien sind auf google drive)
- */
     @Id
     @GeneratedValue
     private Long id;
@@ -42,7 +38,8 @@ public class Recipe {
     private String ingredients; 
     private String material;
     private String steps;
-    private Category category; // to do
+    private Category category;
+    private Subcategory subcategory;
     private String link;
     @Column(nullable = true)
     private Integer calories;
@@ -51,16 +48,10 @@ public class Recipe {
     
     @ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(
-    		  name = "recipe_tag", 
+    		  name = "recipe_user", 
     		  joinColumns = @JoinColumn(name = "idRecipe", referencedColumnName = "id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "idTag", referencedColumnName = "id"))
-    private List<Tag> tags = new ArrayList<Tag>();
-    
-    
- /*
-  * Der Text der Beziehung zwischen username und recipe wird im FE zusammengebaut. (Cheesecake by @RitterSchlagedrein)
-  * Pflichtfelder werden im FE geprüft
-  */
+    		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))
+    private List<User> bookmarks = new ArrayList<User>();
 
 	public Recipe(	String title, 
     				Integer duration, 
@@ -71,8 +62,9 @@ public class Recipe {
     				Integer calories, 
     				String otherInformation,
     				String ingredients,
-    				List<Tag> tags,
-    				Category category) {
+    				List<User> bookmarks,
+    				Category category,
+    				Subcategory subcategory) {
     	
         this.title = title;
         this.duration = duration;
@@ -83,26 +75,22 @@ public class Recipe {
         this.calories = calories;
         this.otherInformation = otherInformation;
         this.ingredients = ingredients;
-        this.tags = tags;
+        this.bookmarks = bookmarks;
         this.category = category;
+        this.subcategory = subcategory;
     }
-
-	public void addTag(Tag tag) {
-		this.tags.add(tag);
+	
+	public void addBookmark(User user) {
+		this.bookmarks.add(user);
+	}
+	
+	public void deleteBookmark(User user) {
+		this.deleteBookmark(user);
 	}
 
 	@Override
     public String toString() {
-    	String tagString = ", tags= [";
-    	if(tags != null) {
-    	for(int i = 0; i < tags.size(); i++) {
-    		if(i > 0) {
-    			tagString+=",";
-    		}
-    		tagString += "{id='" + tags.get(i).getId() + "',title='" + tags.get(i).getTitle() + "'}";
-    		
-    	}}
-    	tagString += "]";
+    	
         return "Recipe{" +
                 "id=" + this.id +
                 ", title='" + this.title + '\'' +
@@ -112,7 +100,6 @@ public class Recipe {
                 ", link='" + this.link + '\'' +
                 ", otherInformation='" + this.otherInformation + '\'' +
                 ", ingredients='" + this.ingredients + '\'' +
-                tagString +
                 '}';
     }
 
