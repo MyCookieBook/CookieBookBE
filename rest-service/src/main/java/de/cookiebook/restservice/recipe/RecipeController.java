@@ -8,6 +8,10 @@ import javax.validation.Valid;
 
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.ingredients.Ingredient;
+import de.cookiebook.restservice.ingredients.IngredientRepository;
+import de.cookiebook.restservice.materials.MaterialRepository;
+import de.cookiebook.restservice.steps.StepRepository;
 import de.cookiebook.restservice.user.User;
 import de.cookiebook.restservice.user.UserRepository;
 
@@ -22,6 +26,14 @@ public class RecipeController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    IngredientRepository ingredientRepository;
+
+    @Autowired
+    MaterialRepository materialRepository;
+
+    @Autowired
+    StepRepository stepRepository;
     public RecipeController(RecipeRepository recipeRepository) {
         this.recipeRepository = recipeRepository;
     }
@@ -29,6 +41,9 @@ public class RecipeController {
     // Add recipe
     @PostMapping("/recipes/add")
     public Recipe addRecipe(@RequestBody Recipe recipe, HttpServletResponse response) {
+        ingredientRepository.saveAll(recipe.getIngredients());
+        materialRepository.saveAll(recipe.getMaterial());
+        stepRepository.saveAll(recipe.getSteps());
 
         recipeRepository.save(recipe);
         System.out.println(recipe);

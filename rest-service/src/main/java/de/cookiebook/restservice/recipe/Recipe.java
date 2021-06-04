@@ -2,6 +2,9 @@ package de.cookiebook.restservice.recipe;
 
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.ingredients.Ingredient;
+import de.cookiebook.restservice.materials.Material;
+import de.cookiebook.restservice.steps.Step;
 import de.cookiebook.restservice.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,15 +13,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Getter
@@ -30,20 +25,17 @@ public class Recipe {
     @Id
     @GeneratedValue
     private Long id;
+    private String author;
     private String title;
     @Column(nullable = true)
     private Integer duration;
     @Column(nullable = true)
     private Integer difficultyLevel;
-    private String ingredients; 
-    private String material;
-    private String steps;
     private Category category;
     private Subcategory subcategory;
     private String link;
     @Column(nullable = true)
     private Integer calories;
-    private String otherInformation;
     
     
     @ManyToMany(cascade = {CascadeType.MERGE })
@@ -52,28 +44,34 @@ public class Recipe {
     		  joinColumns = @JoinColumn(name = "idRecipe", referencedColumnName = "id"), 
     		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))
     private List<User> bookmarks = new ArrayList<User>();
+    @OneToMany(cascade = {CascadeType.MERGE })
+    private List<Ingredient> ingredients = new ArrayList<Ingredient>();
+    @OneToMany
+    private List<Material> material = new ArrayList<Material>();
+    @OneToMany
+    private List<Step> steps = new ArrayList<Step>();
 
-	public Recipe(	String title, 
+	public Recipe(	String author,
+                    String title,
     				Integer duration, 
     				Integer difficultyLevel,
-    				String material, 
-    				String steps, 
+    				List<Material> material,
+    				List<Step> steps,
     				String link, 
-    				Integer calories, 
-    				String otherInformation,
-    				String ingredients,
+    				Integer calories,
+    				List<Ingredient> ingredients,
     				List<User> bookmarks,
     				Category category,
     				Subcategory subcategory) {
     	
-        this.title = title;
+        this.author = author;
+	    this.title = title;
         this.duration = duration;
         this.difficultyLevel = difficultyLevel;
         this.material = material;
         this.steps = steps;
         this.link = link;
         this.calories = calories;
-        this.otherInformation = otherInformation;
         this.ingredients = ingredients;
         this.bookmarks = bookmarks;
         this.category = category;
@@ -93,13 +91,15 @@ public class Recipe {
     	
         return "Recipe{" +
                 "id=" + this.id +
+                ", author='" + this.author + '\'' +
                 ", title='" + this.title + '\'' +
                 ", duration='" + this.duration + '\'' +
                 ", difficultyLevel=" + this.difficultyLevel +
-                ", steps='" + this.steps + '\'' +
+                ", step='" + this.steps + '\'' +
                 ", link='" + this.link + '\'' +
-                ", otherInformation='" + this.otherInformation + '\'' +
                 ", ingredients='" + this.ingredients + '\'' +
+                ", material='" + this.material + '\'' +
+                ", calories='" + this.calories + '\'' +
                 '}';
     }
 
