@@ -23,19 +23,19 @@ public class UserController {
     }
 
     @PostMapping("/users/register")
-    public long registerUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
+    public long registerUser(@Valid @RequestBody User newUser) {
         List<User> users = userRepository.findAll();
         log.info("test1");
         for (User user : users) {
             log.info("test2");
-            if ((user.getEmail()).equals(email)) {
+            if ((user.getEmail()).equals(newUser.getEmail())) {
                 log.info("test3");
                 System.out.println("User Already exists!");
                 log.warn(Status.USER_ALREADY_EXISTS.toString());
                 return Status.USER_ALREADY_EXISTS.getStatuscode();
             }
         }
-        User newUser = new User(email,password);
+
         newUser.setDurration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
         userRepository.save(newUser);
         log.info(Status.SUCCESS.toString());
