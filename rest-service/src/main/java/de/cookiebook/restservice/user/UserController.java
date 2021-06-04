@@ -4,6 +4,7 @@ import de.cookiebook.restservice.config.AuthenticationConfigConstants;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,23 +25,25 @@ public class UserController {
 
     @PostMapping("/users/register")
     public long registerUser(@Valid @RequestBody User newUser) {
-        List<User> users = userRepository.findAll();
-        log.info("test1");
-        for (User user : users) {
-            log.info("test2");
-            if ((user.getEmail()).equals(newUser.getEmail())) {
-                log.info("test3");
-                System.out.println("User Already exists!");
-                log.warn(Status.USER_ALREADY_EXISTS.toString());
-                return Status.USER_ALREADY_EXISTS.getStatuscode();
+        try {
+            List<User> users = userRepository.findAll();
+            for (User user : users) {
+                if ((user.getEmail()).equals(newUser.getEmail())) {
+                    System.out.println("User Already exists!");
+                    log.warn(Status.USER_ALREADY_EXISTS.toString());
+                    return Status.USER_ALREADY_EXISTS.getStatuscode();
+                }
             }
+            newUser.setDurration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
+            userRepository.save(newUser);
+            log.info(Status.SUCCESS.toString());
+            log.info(String.valueOf(newUser.getId()));
+            return newUser.getId();
+        } catch (Exception e) {
+            log.error("failed register user");
+            log.error(e.getMessage());
+            return Status.FAILURE.getStatuscode();
         }
-
-        newUser.setDurration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
-        userRepository.save(newUser);
-        log.info(Status.SUCCESS.toString());
-        log.info(String.valueOf(newUser.getId()));
-        return newUser.getId();
     }
 
     @CrossOrigin(origins = "http://localhost:4200/login")
@@ -60,6 +63,7 @@ public class UserController {
             log.error(String.valueOf(Status.FAILURE.getStatuscode()));
             return Status.FAILURE.getStatuscode();
         } catch (Exception e) {
+            log.error("failed log in user");
             log.error(e.getMessage());
             return Status.FAILURE.getStatuscode();
         }
@@ -69,7 +73,7 @@ public class UserController {
     public long logUserOut(@RequestParam(value = "userId") long userId) {
         List<User> users = userRepository.findAll();
         for (User other : users) {
-            if (other.getId()==userId){
+            if (other.getId() == userId) {
                 other.setLoggedIn(false);
                 other.setDurration(null);
                 userRepository.save(other);
@@ -85,27 +89,37 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public User getUser(@RequestParam(value = "email") String email){
-        List<User> userlist = userRepository.findAll();
-        for (User user : userlist) {
-            if ((user.getEmail()).equals(email)) {
-                return user;
+    public User getUser(@RequestParam(value = "email") String email) {
+        try {
+            List<User> userlist = userRepository.findAll();
+            for (User user : userlist) {
+                if ((user.getEmail()).equals(email)) {
+                    return user;
+                }
             }
+            return new User();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return new User();
         }
-        return new User();
     }
 
     @PostMapping("/changeEmail")
     public Status changeEmail(@RequestParam(value = "userId") long userId, @RequestParam(value = "email") String email) {
-        List<User> users = userRepository.findAll();
-        for (User other : users) {
-            if (other.getId()==userId){
-                other.setEmail(email);
-                userRepository.save(other);
-                return Status.SUCCESS;
+        try {
+            List<User> users = userRepository.findAll();
+            for (User other : users) {
+                if (other.getId() == userId) {
+                    other.setEmail(email);
+                    userRepository.save(other);
+                    return Status.SUCCESS;
+                }
             }
+            return Status.FAILURE;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return Status.FAILURE;
         }
-        return Status.FAILURE;
     }
 
     public void validateDurration(User user) {
@@ -118,27 +132,39 @@ public class UserController {
             log.error(e.getMessage());
         }
     }
-    
+
     // edit profile
-    
+
+    // @RequestBody durch Requestparam austauschen, da wir nur die Id übergeben wollen
     @PostMapping("/users/edit")
     public User editProfile(@Valid @RequestBody User user) {
-        userRepository.save(user);
-        System.out.println(user);
-        return user;
+//        try {
+            userRepository.save(user);
+            System.out.println(user);
+            return user;
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            return new User();
+//        }
     }
-    
+
+    // @RequestBody durch Requestparam austauschen, da wir nur die Id übergeben wollen
     @PostMapping("/users/changePassword")
     public User changePassword(@Valid @RequestBody User user, @RequestBody String newPassword, HttpServletResponse response) {
-    	List<User> users = userRepository.findAll();
-    	for (User other : users) {
-            if (other.equals(user)) {
-                user.setPassword(newPassword);
-                userRepository.save(user);
-                return user;
+//        try {
+            List<User> users = userRepository.findAll();
+            for (User other : users) {
+                if (other.equals(user)) {
+                    user.setPassword(newPassword);
+                    userRepository.save(user);
+                    return user;
+                }
             }
-        } 
-    	response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-    	return null;  	
-    }   
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return null;
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            return new User();
+//        }
+    }
 }
