@@ -6,11 +6,11 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-
 import java.util.List;
 import de.cookiebook.restservice.recipe.Recipe;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 
 @Setter
@@ -29,6 +29,7 @@ public class User {
     
 	@ManyToMany(mappedBy="bookmarks")
     private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
+    private Date durration;
 
     /*
      * Fehler abfangen
