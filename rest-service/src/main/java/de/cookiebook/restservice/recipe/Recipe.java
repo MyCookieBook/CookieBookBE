@@ -91,7 +91,7 @@ public class Recipe {
                 ", title='" + this.title + '\'' +
                 ", duration='" + this.duration + '\'' +
                 ", difficultyLevel=" + this.difficultyLevel +
-                ", step='" + this.steps + '\'' +
+                ", steps='" + this.steps + '\'' +
                 ", link='" + this.link + '\'' +
                 ", ingredients='" + this.ingredients + '\'' +
                 ", material='" + this.material + '\'' +
