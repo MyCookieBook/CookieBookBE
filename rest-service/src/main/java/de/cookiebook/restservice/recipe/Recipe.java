@@ -33,7 +33,7 @@ public class Recipe {
     private String link;
     @Column(nullable = true)
     private Integer calories;
-    
+
     @ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(
     		  name = "recipe_user", 
@@ -47,9 +47,9 @@ public class Recipe {
     @OneToMany
     private List<Step> steps = new ArrayList<Step>();
 
-	public Recipe(	String author,
+	public Recipe(  String author,
                     String title,
-    				Integer duration, 
+                    Integer duration,
     				Integer difficultyLevel,
     				List<Material> material,
     				List<Step> steps,
