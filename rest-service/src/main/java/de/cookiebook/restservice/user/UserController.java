@@ -2,11 +2,9 @@ package de.cookiebook.restservice.user;
 
 import de.cookiebook.restservice.config.AuthenticationConfigConstants;
 import lombok.extern.slf4j.Slf4j;
-
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;

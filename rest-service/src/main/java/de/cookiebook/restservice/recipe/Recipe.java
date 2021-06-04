@@ -9,9 +9,10 @@ import de.cookiebook.restservice.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.*;
 
 @Getter
 @Setter
@@ -98,6 +99,5 @@ public class Recipe {
                 ", calories='" + this.calories + '\'' +
                 '}';
     }
-
 }
 
