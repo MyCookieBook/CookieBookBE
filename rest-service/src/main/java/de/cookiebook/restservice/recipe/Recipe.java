@@ -9,12 +9,9 @@ import de.cookiebook.restservice.user.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.persistence.*;
-
 
 @Getter
 @Setter
@@ -36,7 +33,6 @@ public class Recipe {
     private String link;
     @Column(nullable = true)
     private Integer calories;
-    
     
     @ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(

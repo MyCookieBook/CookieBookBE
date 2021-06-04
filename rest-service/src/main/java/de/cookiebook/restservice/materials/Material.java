@@ -1,4 +1,5 @@
 package de.cookiebook.restservice.materials;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

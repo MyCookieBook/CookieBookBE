@@ -1,28 +1,24 @@
 package de.cookiebook.restservice.recipe;
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
-import de.cookiebook.restservice.ingredients.Ingredient;
 import de.cookiebook.restservice.ingredients.IngredientRepository;
 import de.cookiebook.restservice.materials.MaterialRepository;
 import de.cookiebook.restservice.steps.StepRepository;
 import de.cookiebook.restservice.user.User;
 import de.cookiebook.restservice.user.UserRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200" )
 public class RecipeController {
-
     RecipeRepository recipeRepository;
+
     @Autowired
     UserRepository userRepository;
 
@@ -44,7 +40,6 @@ public class RecipeController {
         ingredientRepository.saveAll(recipe.getIngredients());
         materialRepository.saveAll(recipe.getMaterial());
         stepRepository.saveAll(recipe.getSteps());
-
         recipeRepository.save(recipe);
         System.out.println(recipe);
         return recipe;
@@ -83,7 +78,6 @@ public class RecipeController {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-
     // implement find
     @GetMapping("/recipeslist")
     public List<Recipe> getRecipes(){
@@ -106,7 +100,7 @@ public class RecipeController {
     	user.addRecipe(recipe);
     	userRepository.save(user);
     	recipeRepository.save(recipe);
-    	
+
         response.setStatus(HttpServletResponse.SC_OK);
     }
     // delete bookmark
