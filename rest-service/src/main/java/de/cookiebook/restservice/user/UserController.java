@@ -46,6 +46,8 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:4200/login")
     @PostMapping("/users/login")
     public long loginUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
+        log.info(email);
+        log.info(password);
         try {
             List<User> users = userRepository.findAll();
             for (User other : users) {
