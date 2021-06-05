@@ -36,8 +36,9 @@ public class RecipeController {
 
     // Add recipe
     @PostMapping("/recipes/add")
-    public Recipe addRecipe(@RequestBody Recipe recipe, HttpServletResponse response) {
+    public Recipe addRecipe(@RequestBody Recipe recipe, @RequestParam("userId") long userId, HttpServletResponse response) {
         ingredientRepository.saveAll(recipe.getIngredients());
+        //System.out.println(userId);
         materialRepository.saveAll(recipe.getMaterial());
         stepRepository.saveAll(recipe.getSteps());
         recipeRepository.save(recipe);
@@ -47,7 +48,7 @@ public class RecipeController {
 
     // Read recipe
     @GetMapping("/recipes/read")
-    public Recipe readRecipe(@RequestParam("id") Long id, HttpServletResponse response) {
+    public Recipe readRecipe(@RequestParam("id") Long id, @RequestParam("userId") long userId, HttpServletResponse response) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if(!recipe.isPresent()) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -59,56 +60,59 @@ public class RecipeController {
 
     // Edit recipe
     @PostMapping("/recipes/edit")
-    public Recipe editRecipe(@RequestBody Recipe recipe) {
+    public Recipe editRecipe(@RequestBody Recipe recipe, @RequestParam("userId") long userId) {
         recipeRepository.save(recipe);
         System.out.println(recipe);
         return recipe;
     }
 
     // Delete recipe
-    @PostMapping("/recipes/delete")
-    public void deleteRecipe(@RequestBody Long id, HttpServletResponse response) {
-        Optional<Recipe> recipe = recipeRepository.findById(id);
-        if(!recipe.isPresent()) {
+    @DeleteMapping("/recipes/deleteRecipe")
+    public void deleteRecipe(@RequestParam("id") long id, @RequestParam("userId") long userId, HttpServletResponse response) {
+        if(!recipeRepository.existsById(id)) {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        System.out.println(recipe + "deleted");
         recipeRepository.deleteById(id);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
     // implement find
     @GetMapping("/recipeslist")
-    public List<Recipe> getRecipes(){
+    public List<Recipe> getRecipes(@RequestParam("userId") long userId){
         return recipeRepository.findAll();
     }
     
     @GetMapping(value = "/recipeslist/byCategory/{Category}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Category category){
+    public List<Recipe> getRecipesByCategory(@PathVariable("Category") Category category, @RequestParam("userId") long userId){
         return recipeRepository.findAllByCategory(category);
     }
     
     @GetMapping(value = "/recipeslist/bySubcategory/{Subcategory}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Subcategory subcategory){
+    public List<Recipe> getRecipesByCategory(@PathVariable("Subcategory") Subcategory subcategory, @RequestParam("userId") long userId){
         return recipeRepository.findAllBySubcategory(subcategory);
     }
     
     // bookmark favourite
     @PostMapping("/recipe/bookmark")
-    public void bookmarkRecipe(@RequestBody Recipe recipe, @RequestBody User user, HttpServletResponse response) {
-    	user.addRecipe(recipe);
+    public void bookmarkRecipe(@RequestParam("recipeId") long recipeId, @RequestParam("userId") long userId, HttpServletResponse response) {
+    	User user = userRepository.getOne(userId);
+    	Recipe recipe = recipeRepository.getOne(recipeId);
+        user.addRecipe(recipe);
+        //recipe.addBookmark(user); wird bereits bei User gemacht
     	userRepository.save(user);
-    	recipeRepository.save(recipe);
+    	//recipeRepository.save(recipe);
 
         response.setStatus(HttpServletResponse.SC_OK);
     }
     // delete bookmark
     @DeleteMapping("/recipe/deleteBookmark")
-    public void deleteBookmark(@RequestBody Recipe recipe, @RequestBody User user, HttpServletResponse response) {
-    	user.deleteBookmark(recipe);
+    public void deleteBookmark(@RequestParam("recipeId") long recipeId, @RequestParam("userId") long userId, HttpServletResponse response) {
+        User user = userRepository.getOne(userId);
+        Recipe recipe = recipeRepository.getOne(recipeId);
+        user.deleteBookmark(recipe);
     	userRepository.save(user);
-    	recipeRepository.save(recipe); 
+    	//recipeRepository.save(recipe);
     
         response.setStatus(HttpServletResponse.SC_OK);
     }
