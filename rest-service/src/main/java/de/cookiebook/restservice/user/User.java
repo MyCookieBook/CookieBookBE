@@ -27,6 +27,8 @@ public class User {
     private @NotBlank String email;
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
+
+    private String username;
     
 	@ManyToMany
     private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();

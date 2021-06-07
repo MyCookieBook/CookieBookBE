@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @Slf4j
@@ -92,40 +94,47 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public User getUser(@RequestParam(value = "email") String email) {
+    public String[] getUser(@RequestParam(value = "UserId") long userId) {
         try {
+            String[] userArray = new String[2];
             List<User> userlist = userRepository.findAll();
             for (User user : userlist) {
-                if ((user.getEmail()).equals(email)) {
-                    return user;
+                if (user.getId() == userId) {
+                    if (validateDurration(user)) {
+                        userArray[0] = user.getEmail();
+                        userArray[1] = user.getUsername();
+                        return userArray;
+                    } else {
+                        return null;
+                    }
                 }
             }
-            return new User();
+            return null;
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new User();
+            return null;
         }
     }
 
     // testen bzw manuell ändern der email adresse
 //     nicht um von außen drauf zu zugreifen
-    @PostMapping("/changeEmail")
-    public Status changeEmail(@RequestParam(value = "userId") long userId, @RequestParam(value = "email") String email) {
-        try {
-            List<User> users = userRepository.findAll();
-            for (User other : users) {
-                if (other.getId() == userId) {
-                    other.setEmail(email);
-                    userRepository.save(other);
-                    return Status.SUCCESS;
-                }
-            }
-            return Status.FAILURE;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return Status.FAILURE;
-        }
-    }
+//    @PostMapping("/changeEmail")
+//    public Status changeEmail(@RequestParam(value = "userId") long userId, @RequestParam(value = "email") String email) {
+//        try {
+//            List<User> users = userRepository.findAll();
+//            for (User other : users) {
+//                if (other.getId() == userId) {
+//                    other.setEmail(email);
+//                    userRepository.save(other);
+//                    return Status.SUCCESS;
+//                }
+//            }
+//            return Status.FAILURE;
+//        } catch (Exception e) {
+//            log.error(e.getMessage());
+//            return Status.FAILURE;
+//        }
+//    }
 
     public boolean validateDurration(User user) {
         try {
@@ -145,7 +154,7 @@ public class UserController {
 
     // edit profile
     @PostMapping("/users/edit")
-    public User editProfile(@Valid @RequestBody User user) {
+    public long editProfile(@Valid @RequestBody User user) {
         try {
             User userBefore = userRepository.findById(user.getId());
             if (validateDurration(userBefore)) {
@@ -156,40 +165,40 @@ public class UserController {
                 user.setDuration(userBefore.getDuration());
                 userRepository.save(user);
                 System.out.println(user);
-                return user;
+                return Status.SUCCESS.getStatuscode();
             } else {
-                return null;
+                return Status.FAILURE.getStatuscode();
             }
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return new User();
+            return Status.FAILURE.getStatuscode();
         }
     }
 
     @PostMapping("/users/changePassword")
-    public User changePassword(@Valid @RequestBody User user, @RequestParam(value = "newPassword") String newPassword, HttpServletResponse response) {
+    public long changePassword(@Valid @RequestBody User user, @RequestParam(value = "newPassword") String newPassword, HttpServletResponse response) {
         try {
-                List<User> users = userRepository.findAll();
-                for (User other : users) {
-                    if (other.getEmail().equals(user.getEmail()) && other.getId() == user.getId()) {
-                        if (validateDurration(other)) {
+            List<User> users = userRepository.findAll();
+            for (User other : users) {
+                if (other.getEmail().equals(user.getEmail()) && other.getId() == user.getId()) {
+                    if (validateDurration(other)) {
                         user.setPassword(newPassword);
                         user.setLoggedIn(true);
                         user.setDuration(other.getDuration());
                         userRepository.save(user);
-                        return user;
-                        } else {
-                            return null;
-                        }
+                        return Status.SUCCESS.getStatuscode();
+                    } else {
+                        return Status.FAILURE.getStatuscode();
                     }
                 }
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-                return null;
+            }
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            return Status.FAILURE.getStatuscode();
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            return null;
+            return Status.FAILURE.getStatuscode();
         }
     }
 }
