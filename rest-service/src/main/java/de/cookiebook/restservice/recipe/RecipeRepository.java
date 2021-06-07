@@ -10,7 +10,7 @@ import de.cookiebook.restservice.category.Subcategory;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
-    List<Recipe> findAllByCategory(Category Category);
-	List<Recipe> findAllBySubcategory(Subcategory subcategory);
+    List<Recipe> findAllByCategory(Category category);
+    List<Recipe> findAllBySubcategory(Subcategory subcategory);
 	
 }

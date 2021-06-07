@@ -43,9 +43,9 @@ public class Recipe {
     private List<User> bookmarks = new ArrayList<User>();*/
     @OneToMany(cascade = {CascadeType.MERGE })
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE })
     private List<Material> material = new ArrayList<Material>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE })
     private List<Step> steps = new ArrayList<Step>();
 
 	public Recipe(  String author,
