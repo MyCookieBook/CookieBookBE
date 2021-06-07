@@ -28,9 +28,9 @@ public class User {
     private @NotBlank String password;
     private @NotBlank boolean loggedIn;
     
-	@ManyToMany(mappedBy="bookmarks")
+	@ManyToMany
     private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
-    private Date durration;
+    private Date duration;
 
     /*
      * Fehler abfangen
@@ -69,11 +69,11 @@ public class User {
     
 	public void addRecipe(Recipe recipe) {
 		bookmarkRecipes.add(recipe);
-			recipe.addBookmark(this);
+//			recipe.addBookmark(this);
 		}
 	public void deleteBookmark(Recipe recipe) {
 		bookmarkRecipes.remove(recipe);
-		recipe.deleteBookmark(this);
+//		recipe.deleteBookmark(this);
 	}
 
 	public void setPassword(String newPassword) {

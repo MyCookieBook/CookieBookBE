@@ -10,8 +10,6 @@ ${AnsiColor.BRIGHT_RED}
 
 ${AnsiColor.WHITE}
 ------------------------------------------------------------------------
-Project Name: ${project.name}
-Spring Boot Version: ${spring-boot.version}
-Spring Boot Formatted Version: ${spring-boot.formatted-version}
-Swagger UI: http://localhost:${server.port} ${server.servlet.context-path}/swagger-ui.html
+Project Name: MyCookieBook
+Team: Sarah Glatt, Zhibek Bastian, Sinja Ohle
 ------------------------------------------------------------------------

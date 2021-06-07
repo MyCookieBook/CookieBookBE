@@ -35,17 +35,17 @@ public class Recipe {
     @Column(nullable = true)
     private Integer calories;
 
-    @ManyToMany(cascade = {CascadeType.MERGE })
+    /*@ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(
     		  name = "recipe_user", 
     		  joinColumns = @JoinColumn(name = "idRecipe", referencedColumnName = "id"), 
     		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))
-    private List<User> bookmarks = new ArrayList<User>();
+    private List<User> bookmarks = new ArrayList<User>();*/
     @OneToMany(cascade = {CascadeType.MERGE })
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE })
     private List<Material> material = new ArrayList<Material>();
-    @OneToMany
+    @OneToMany(cascade = {CascadeType.MERGE })
     private List<Step> steps = new ArrayList<Step>();
 
 	public Recipe(  String author,
@@ -57,7 +57,7 @@ public class Recipe {
     				String link, 
     				Integer calories,
     				List<Ingredient> ingredients,
-    				List<User> bookmarks,
+//    				List<User> bookmarks,
     				Category category,
     				Subcategory subcategory) {
     	
@@ -70,18 +70,18 @@ public class Recipe {
         this.link = link;
         this.calories = calories;
         this.ingredients = ingredients;
-        this.bookmarks = bookmarks;
+//        this.bookmarks = bookmarks;
         this.category = category;
         this.subcategory = subcategory;
     }
 	
-	public void addBookmark(User user) {
-		this.bookmarks.add(user);
-	}
-	
-	public void deleteBookmark(User user) {
-		this.deleteBookmark(user);
-	}
+//	public void addBookmark(User user) {
+//		this.bookmarks.add(user);
+//	}
+//
+//	public void deleteBookmark(User user) {
+//		this.deleteBookmark(user);
+//	}
 
 	@Override
     public String toString() {
