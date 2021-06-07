@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,8 @@ public class Recipe {
     private Category category;
     private Subcategory subcategory;
     private String link;
-    @Column(nullable = true)
-    private Integer calories;
+    //@Column(nullable = true)
+    private String calory;
 
     /*@ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(
@@ -55,7 +56,7 @@ public class Recipe {
     				List<Material> material,
     				List<Step> steps,
     				String link, 
-    				Integer calories,
+    				String calory,
     				List<Ingredient> ingredients,
     				//List<User> bookmarks,
     				Category category,
@@ -68,7 +69,7 @@ public class Recipe {
         this.material = material;
         this.steps = steps;
         this.link = link;
-        this.calories = calories;
+        this.calory = calory;
         this.ingredients = ingredients;
         //this.bookmarks = bookmarks;
         this.category = category;
@@ -96,7 +97,7 @@ public class Recipe {
                 ", link='" + this.link + '\'' +
                 ", ingredients='" + this.ingredients + '\'' +
                 ", material='" + this.material + '\'' +
-                ", calories='" + this.calories + '\'' +
+                ", calory='" + this.calory + '\'' +
                 '}';
     }
 }
