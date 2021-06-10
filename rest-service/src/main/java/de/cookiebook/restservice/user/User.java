@@ -90,5 +90,5 @@ public class User {
     public void setLoggedIn(boolean b) {
         this.loggedIn = b;
     }
-
+  
 }
