@@ -33,35 +33,39 @@ public class Recipe {
     private Subcategory subcategory;
     private String link;
     private String calory;
+    private boolean bookmark;
+    private String other;
+    private long userId;
 
     /*@ManyToMany(cascade = {CascadeType.MERGE })
     @JoinTable(
     		  name = "recipe_user", 
     		  joinColumns = @JoinColumn(name = "idRecipe", referencedColumnName = "id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))
-    private List<User> bookmarks = new ArrayList<User>();*/
-    @OneToMany(cascade = {CascadeType.MERGE })
+    		  inverseJoinColumns = @JoinColumn(name = "idUser", referencedColumnName = "id"))*/
+
+    @OneToMany(cascade = {CascadeType.MERGE})
     private List<Ingredient> ingredients = new ArrayList<Ingredient>();
-    @OneToMany(cascade = {CascadeType.MERGE })
+    @OneToMany(cascade = {CascadeType.MERGE})
     private List<Material> material = new ArrayList<Material>();
-    @OneToMany(cascade = {CascadeType.MERGE })
+    @OneToMany(cascade = {CascadeType.MERGE})
     private List<Step> steps = new ArrayList<Step>();
 
-	public Recipe(  String author,
-                    String title,
-                    Integer duration,
-    				Integer difficultyLevel,
-    				List<Material> material,
-    				List<Step> steps,
-    				String link, 
-    				String calory,
-    				List<Ingredient> ingredients,
+    public Recipe(String author,
+                  String title,
+                  Integer duration,
+                  Integer difficultyLevel,
+                  List<Material> material,
+                  List<Step> steps,
+                  String link,
+                  String calory,
+                  List<Ingredient> ingredients,
 //    				List<User> bookmarks,
-    				Category category,
-    				Subcategory subcategory) {
-    	
+                  Category category,
+                  Subcategory subcategory,
+                  String other) {
+
         this.author = author;
-	    this.title = title;
+        this.title = title;
         this.duration = duration;
         this.difficultyLevel = difficultyLevel;
         this.material = material;
@@ -72,19 +76,12 @@ public class Recipe {
 //        this.bookmarks = bookmarks;
         this.category = category;
         this.subcategory = subcategory;
+        this.other = other;
     }
-	
-//	public void addBookmark(User user) {
-//		this.bookmarks.add(user);
-//	}
-//
-//	public void deleteBookmark(User user) {
-//		this.deleteBookmark(user);
-//	}
 
-	@Override
+    @Override
     public String toString() {
-    	
+
         return "Recipe{" +
                 "id=" + this.id +
                 ", author='" + this.author + '\'' +
@@ -96,6 +93,7 @@ public class Recipe {
                 ", ingredients='" + this.ingredients + '\'' +
                 ", material='" + this.material + '\'' +
                 ", calory='" + this.calory + '\'' +
+                ", bookmarked='" + this.bookmark + '\'' +
                 '}';
     }
 }

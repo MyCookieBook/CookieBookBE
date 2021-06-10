@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
+
 import de.cookiebook.restservice.recipe.Recipe;
 
 import java.util.ArrayList;
@@ -29,9 +30,9 @@ public class User {
     private @NotBlank boolean loggedIn;
 
     private String username;
-    
-	@ManyToMany
-    private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
+
+//    @ManyToMany
+//    private List<Recipe> bookmarkRecipes = new ArrayList<Recipe>();
     private Date duration;
 
     /*
@@ -54,11 +55,13 @@ public class User {
         return Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password);
     }
+
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, 
-                            loggedIn);
+        return Objects.hash(id, email, password,
+                loggedIn);
     }
+
     @Override
     public String toString() {
         return "User{" +
@@ -68,23 +71,24 @@ public class User {
                 ", loggedIn=" + loggedIn +
                 '}';
     }
-    
-	public void addRecipe(Recipe recipe) {
-		bookmarkRecipes.add(recipe);
-//			recipe.addBookmark(this);
-		}
-	public void deleteBookmark(Recipe recipe) {
-		bookmarkRecipes.remove(recipe);
-//		recipe.deleteBookmark(this);
-	}
 
-	public void setPassword(String newPassword) {
-		this.password = newPassword;
-		
-	}
+//    public void addRecipe(Recipe recipe) {
+//        bookmarkRecipes.add(recipe);
+////			recipe.addBookmark(this);
+//    }
+//
+//    public void deleteBookmark(Recipe recipe) {
+//        bookmarkRecipes.remove(recipe);
+////		recipe.deleteBookmark(this);
+//    }
 
-	public void setLoggedIn(boolean b) {
-		this.loggedIn = b;
-	}
+    public void setPassword(String newPassword) {
+        this.password = newPassword;
+
+    }
+
+    public void setLoggedIn(boolean b) {
+        this.loggedIn = b;
+    }
 
 }

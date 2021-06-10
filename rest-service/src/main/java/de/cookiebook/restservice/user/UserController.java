@@ -2,18 +2,14 @@ package de.cookiebook.restservice.user;
 
 import de.cookiebook.restservice.config.AuthenticationConfigConstants;
 import lombok.extern.slf4j.Slf4j;
-
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Slf4j
@@ -116,26 +112,6 @@ public class UserController {
         }
     }
 
-    // testen bzw manuell ändern der email adresse
-//     nicht um von außen drauf zu zugreifen
-//    @PostMapping("/changeEmail")
-//    public Status changeEmail(@RequestParam(value = "userId") long userId, @RequestParam(value = "email") String email) {
-//        try {
-//            List<User> users = userRepository.findAll();
-//            for (User other : users) {
-//                if (other.getId() == userId) {
-//                    other.setEmail(email);
-//                    userRepository.save(other);
-//                    return Status.SUCCESS;
-//                }
-//            }
-//            return Status.FAILURE;
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return Status.FAILURE;
-//        }
-//    }
-
     public boolean validateDurration(User user) {
         try {
             Date expiration = user.getDuration();
@@ -160,6 +136,12 @@ public class UserController {
             if (validateDurration(userBefore)) {
                 if (user.getPassword() == null) {
                     user.setPassword(userBefore.getPassword());
+                }
+                if (user.getEmail() == null) {
+                    user.setEmail(userBefore.getEmail());
+                }
+                if (user.getUsername() == null) {
+                    user.setUsername(userBefore.getUsername());
                 }
                 user.setLoggedIn(true);
                 user.setDuration(userBefore.getDuration());
