@@ -91,47 +91,6 @@ public class RecipeController {
         }
     }
 
-//    // Read recipe
-//    // wird nicht im frontend gebraucht
-//    @GetMapping("/recipes/read")
-//    public Recipe readRecipe(@RequestParam("recipeId") Long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                Optional<Recipe> recipe = recipeRepository.findById(recipeId);
-//                if (!recipe.isPresent()) {
-//                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                    return null;
-//                } else {
-//                    return recipe.get();
-//                }
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
-//    // Edit recipe
-//    @PostMapping("/recipes/edit")
-//    public Recipe editRecipe(@RequestBody Recipe recipe, @RequestParam(value = "userId") long userId) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                recipeRepository.save(recipe);
-//                System.out.println(recipe);
-//                return recipe;
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
     // Delete recipe
     @PostMapping("/recipes/delete")
     public void deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
