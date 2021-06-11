@@ -2,6 +2,7 @@ package de.cookiebook.restservice.recipe;
 
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.ingredients.Ingredient;
 import de.cookiebook.restservice.ingredients.IngredientRepository;
 import de.cookiebook.restservice.materials.MaterialRepository;
 import de.cookiebook.restservice.steps.StepRepository;
@@ -11,10 +12,12 @@ import de.cookiebook.restservice.user.UserController;
 import de.cookiebook.restservice.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -182,12 +185,19 @@ public class RecipeController {
         }
     }
 
-    @GetMapping(value = "/recipeslist/byName")
-    public List<Recipe> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
+    // find by Title
+    @GetMapping(value = "/recipeslist/search")
+    public HashSet<Recipe> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
         try {
+            List<Recipe> returnRecipes = new ArrayList<Recipe>();
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
-                return recipeRepository.findAllByTitleContainingIgnoreCase(term);
+                returnRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);
+                returnRecipes.addAll(recipeRepository.findAllByTitleContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
+                return new HashSet<Recipe>(returnRecipes);
             } else {
                 return null;
             }
@@ -196,7 +206,6 @@ public class RecipeController {
             return null;
         }
     }
-
 
     // bookmark favourite
     @PostMapping("/recipe/bookmark")
