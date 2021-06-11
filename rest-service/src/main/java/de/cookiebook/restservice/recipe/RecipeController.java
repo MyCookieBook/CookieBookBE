@@ -160,6 +160,7 @@ public class RecipeController {
             } else {
                 return null;
             }
+
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;
@@ -221,6 +222,22 @@ public class RecipeController {
             return null;
         }
     }
+
+    @GetMapping(value = "/recipeslist/byName")
+    public List<Recipe> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
+        try {
+            User user = userRepository.findById(userId);
+            if (userController.validateDurration(user)) {
+                return recipeRepository.findAllByTitleContainingIgnoreCase(term);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
 
     // bookmark favourite
     @PostMapping("/recipe/bookmark")

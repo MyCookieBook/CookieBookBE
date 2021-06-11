@@ -3,6 +3,7 @@ package de.cookiebook.restservice.recipe;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import de.cookiebook.restservice.category.Category;
@@ -15,5 +16,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllBySubcategory(Subcategory subcategory);
 
     List<Recipe> findByUserId (long userId);
+
+    @Query
+    List<Recipe> findAllByTitleContainingIgnoreCase(String term);
 
 }
