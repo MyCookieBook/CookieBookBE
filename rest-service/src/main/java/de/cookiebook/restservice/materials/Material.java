@@ -23,4 +23,9 @@ public class Material {
     public Material(String materialName) {
         this.materialName = materialName;
     }
+
+    @Override
+    public String toString() {
+        return this.materialName;
+    }
 }

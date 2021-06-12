@@ -91,47 +91,6 @@ public class RecipeController {
         }
     }
 
-//    // Read recipe
-//    // wird nicht im frontend gebraucht
-//    @GetMapping("/recipes/read")
-//    public Recipe readRecipe(@RequestParam("recipeId") Long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                Optional<Recipe> recipe = recipeRepository.findById(recipeId);
-//                if (!recipe.isPresent()) {
-//                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                    return null;
-//                } else {
-//                    return recipe.get();
-//                }
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
-//    // Edit recipe
-//    @PostMapping("/recipes/edit")
-//    public Recipe editRecipe(@RequestBody Recipe recipe, @RequestParam(value = "userId") long userId) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                recipeRepository.save(recipe);
-//                System.out.println(recipe);
-//                return recipe;
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
     // Delete recipe
     @PostMapping("/recipes/delete")
     public void deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
@@ -178,9 +137,9 @@ public class RecipeController {
                         favoriteRecipes.add(allRecipe);
                     }
                 }
-                if (favoriteRecipes.isEmpty()){
+                if (favoriteRecipes.isEmpty()) {
                     return null;
-                }else {
+                } else {
                     return favoriteRecipes;
                 }
             } else {
@@ -192,11 +151,12 @@ public class RecipeController {
         }
     }
 
-    @GetMapping(value = "/recipeslist/byCategory/{category}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Category category, @RequestParam(value = "userId") long userId) {
+    @GetMapping(value = "/recipeslist/byCategory/{stringCategory}")
+    public List<Recipe> getRecipesByCategory(@PathVariable String stringCategory, @RequestParam(value = "userId") long userId) {
         try {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
+                Category category = recipeRepository.getCategory(stringCategory);
                 return recipeRepository.findAllByCategory(category);
             } else {
                 return null;
@@ -207,12 +167,18 @@ public class RecipeController {
         }
     }
 
-    @GetMapping(value = "/recipeslist/bySubcategory/{subcategory}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Subcategory subcategory, @RequestParam(value = "userId") long userId) {
+    @GetMapping(value = "/recipeslist/bySubcategory/{stringSubcategory}")
+    public List<String> getRecipesBySubcategory(@PathVariable String stringSubcategory, @RequestParam(value = "userId") long userId) {
         try {
-            User user = userRepository.findById(userId);
+          User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
-                return recipeRepository.findAllBySubcategory(subcategory);
+                List<String> recipes = new ArrayList<>();
+                Subcategory subcategory = recipeRepository.getSubcategory(stringSubcategory);
+                List<Recipe> recipeList = recipeRepository.findAllBySubcategory(subcategory);
+                for (Recipe recipe : recipeList) {
+                    recipes.add(recipe.toString());
+                }
+                return recipes;
             } else {
                 return null;
             }
