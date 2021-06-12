@@ -2,6 +2,7 @@ package de.cookiebook.restservice.recipe;
 
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.ingredients.Ingredient;
 import de.cookiebook.restservice.ingredients.IngredientRepository;
 import de.cookiebook.restservice.materials.MaterialRepository;
 import de.cookiebook.restservice.steps.StepRepository;
@@ -11,10 +12,12 @@ import de.cookiebook.restservice.user.UserController;
 import de.cookiebook.restservice.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,47 +94,6 @@ public class RecipeController {
         }
     }
 
-//    // Read recipe
-//    // wird nicht im frontend gebraucht
-//    @GetMapping("/recipes/read")
-//    public Recipe readRecipe(@RequestParam("recipeId") Long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                Optional<Recipe> recipe = recipeRepository.findById(recipeId);
-//                if (!recipe.isPresent()) {
-//                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-//                    return null;
-//                } else {
-//                    return recipe.get();
-//                }
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
-//    // Edit recipe
-//    @PostMapping("/recipes/edit")
-//    public Recipe editRecipe(@RequestBody Recipe recipe, @RequestParam(value = "userId") long userId) {
-//        try {
-//            User user = userRepository.findById(userId);
-//            if (userController.validateDurration(user)) {
-//                recipeRepository.save(recipe);
-//                System.out.println(recipe);
-//                return recipe;
-//            } else {
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            return null;
-//        }
-//    }
-
     // Delete recipe
     @PostMapping("/recipes/delete")
     public void deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
@@ -160,6 +122,7 @@ public class RecipeController {
             } else {
                 return null;
             }
+
         } catch (Exception e) {
             log.error(e.getMessage());
             return null;
@@ -213,6 +176,28 @@ public class RecipeController {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
                 return recipeRepository.findAllBySubcategory(subcategory);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        }
+    }
+
+    // find by Title
+    @GetMapping(value = "/recipeslist/search")
+    public HashSet<Recipe> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
+        try {
+            List<Recipe> returnRecipes = new ArrayList<Recipe>();
+            User user = userRepository.findById(userId);
+            if (userController.validateDurration(user)) {
+                returnRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);
+                returnRecipes.addAll(recipeRepository.findAllByTitleContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
+                returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
+                return new HashSet<Recipe>(returnRecipes);
             } else {
                 return null;
             }
