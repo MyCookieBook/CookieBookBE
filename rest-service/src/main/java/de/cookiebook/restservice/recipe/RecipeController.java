@@ -79,7 +79,7 @@ public class RecipeController {
                     }
                     return 0;
                 } else {
-//                  edit recipe einfach in add
+
                     recipe.setUserId(userId);
                     recipeRepository.save(recipe);
                     return recipe.getId();
@@ -97,21 +97,24 @@ public class RecipeController {
 
     // Delete recipe
     @PostMapping("/recipes/delete")
-    public void deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
+    public long deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
         try {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
                 if (!recipeRepository.existsById(id)) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    return;
+                    return 40;
                 }
                 recipeRepository.deleteById(id);
                 response.setStatus(HttpServletResponse.SC_OK);
-            }else {
+                return 20;
+            } else {
                 userController.logUserOut(userId);
+                return 40;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            return 40;
         }
     }
 
@@ -219,8 +222,8 @@ public class RecipeController {
                 returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
                 returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
                 returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
-                for ( int i = 0; i < returnRecipes.size(); i++){
-                    if(returnRecipes.get(i).getUserId() != userId){
+                for (int i = 0; i < returnRecipes.size(); i++) {
+                    if (returnRecipes.get(i).getUserId() != userId) {
                         returnRecipes.remove(i);
                     }
                 }
@@ -254,7 +257,7 @@ public class RecipeController {
                 System.out.println("bookmarked recipe");
                 response.setStatus(HttpServletResponse.SC_OK);
                 return 20;
-            }else {
+            } else {
                 userController.logUserOut(userId);
                 return 40;
             }
@@ -272,12 +275,10 @@ public class RecipeController {
             Recipe recipe = recipeRepository.getOne(recipeId);
             if (userController.validateDurration(user)) {
                 recipe.setBookmark(false);
-//                user.deleteBookmark(recipe);
-//                userRepository.save(user);
                 recipeRepository.save(recipe);
                 response.setStatus(HttpServletResponse.SC_OK);
                 return 20;
-            }else {
+            } else {
                 userController.logUserOut(userId);
                 return 40;
             }
