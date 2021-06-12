@@ -23,4 +23,9 @@ public class Step {
     public Step(String stepName) {
         this.stepName = stepName;
     }
+
+    @Override
+    public String toString() {
+        return this.stepName;
+    }
 }

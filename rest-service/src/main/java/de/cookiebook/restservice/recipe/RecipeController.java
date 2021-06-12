@@ -76,16 +76,17 @@ public class RecipeController {
                             id = allRecipe.getId();
                             return id;
                         }
-
                     }
                     return 0;
                 } else {
-//                  edit recipe einfach in add
+
+                    recipe.setUserId(userId);
                     recipeRepository.save(recipe);
                     return recipe.getId();
                 }
             } else {
                 System.out.println("failed adding recipe");
+                userController.logUserOut(userId);
                 return 0;
             }
         } catch (Exception e) {
@@ -96,19 +97,24 @@ public class RecipeController {
 
     // Delete recipe
     @PostMapping("/recipes/delete")
-    public void deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
+    public long deleteRecipe(@RequestParam(value = "recipeId") long id, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
         try {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
                 if (!recipeRepository.existsById(id)) {
                     response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                    return;
+                    return 40;
                 }
                 recipeRepository.deleteById(id);
                 response.setStatus(HttpServletResponse.SC_OK);
+                return 20;
+            } else {
+                userController.logUserOut(userId);
+                return 40;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            return 40;
         }
     }
 
@@ -130,20 +136,20 @@ public class RecipeController {
     }
 
     @GetMapping("/recipeslist/favorite")
-    public List<Recipe> getFavoriteRecipes(@RequestParam(value = "userId") long userId) {
+    public List<String> getFavoriteRecipes(@RequestParam(value = "userId") long userId) {
         try {
             User user = userRepository.findById(userId);
-            List<Recipe> favoriteRecipes = new ArrayList<Recipe>();
+            List<String> favoriteRecipes = new ArrayList<>();
             if (userController.validateDurration(user)) {
                 List<Recipe> allRecipes = recipeRepository.findByUserId(userId);
                 for (Recipe allRecipe : allRecipes) {
                     if (allRecipe.isBookmark()) {
-                        favoriteRecipes.add(allRecipe);
+                        favoriteRecipes.add(allRecipe.toString());
                     }
                 }
-                if (favoriteRecipes.isEmpty()){
+                if (favoriteRecipes.isEmpty()) {
                     return null;
-                }else {
+                } else {
                     return favoriteRecipes;
                 }
             } else {
@@ -155,13 +161,22 @@ public class RecipeController {
         }
     }
 
-    @GetMapping(value = "/recipeslist/byCategory/{category}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Category category, @RequestParam(value = "userId") long userId) {
+    @GetMapping(value = "/recipeslist/byCategory/{stringCategory}")
+    public List<String> getRecipesByCategory(@PathVariable String stringCategory, @RequestParam(value = "userId") long userId) {
         try {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
-                return recipeRepository.findAllByCategory(category);
+                List<String> recipes = new ArrayList<>();
+                Category category = recipeRepository.getCategory(stringCategory);
+                List<Recipe> recipeList = recipeRepository.findAllByCategory(category);
+                for (Recipe recipe : recipeList) {
+                    if (recipe.getUserId() == userId) {
+                        recipes.add(recipe.toString());
+                    }
+                }
+                return recipes;
             } else {
+                userController.logUserOut(userId);
                 return null;
             }
         } catch (Exception e) {
@@ -170,13 +185,22 @@ public class RecipeController {
         }
     }
 
-    @GetMapping(value = "/recipeslist/bySubcategory/{subcategory}")
-    public List<Recipe> getRecipesByCategory(@PathVariable Subcategory subcategory, @RequestParam(value = "userId") long userId) {
+    @GetMapping(value = "/recipeslist/bySubcategory/{stringSubcategory}")
+    public List<String> getRecipesBySubcategory(@PathVariable String stringSubcategory, @RequestParam(value = "userId") long userId) {
         try {
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
-                return recipeRepository.findAllBySubcategory(subcategory);
+                List<String> recipes = new ArrayList<>();
+                Subcategory subcategory = recipeRepository.getSubcategory(stringSubcategory);
+                List<Recipe> recipeList = recipeRepository.findAllBySubcategory(subcategory);
+                for (Recipe recipe : recipeList) {
+                    if (recipe.getUserId() == userId) {
+                        recipes.add(recipe.toString());
+                    }
+                }
+                return recipes;
             } else {
+                userController.logUserOut(userId);
                 return null;
             }
         } catch (Exception e) {
@@ -187,9 +211,10 @@ public class RecipeController {
 
     // find by Title
     @GetMapping(value = "/recipeslist/search")
-    public HashSet<Recipe> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
+    public List<String> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
         try {
-            List<Recipe> returnRecipes = new ArrayList<Recipe>();
+            List<Recipe> returnRecipes;
+            List<String> recipeList = new ArrayList<>();
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
                 returnRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);
@@ -197,8 +222,21 @@ public class RecipeController {
                 returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
                 returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
                 returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
-                return new HashSet<Recipe>(returnRecipes);
+                for (int i = 0; i < returnRecipes.size(); i++) {
+                    if (returnRecipes.get(i).getUserId() != userId) {
+                        returnRecipes.remove(i);
+                    }
+                }
+                HashSet<Recipe> recipeHash = new HashSet<Recipe>(returnRecipes);
+
+                Object[] object = recipeHash.toArray();
+                for (Object o : object) {
+                    recipeList.add(o.toString());
+                }
+//                recipeList.sort();
+                return recipeList;
             } else {
+                userController.logUserOut(userId);
                 return null;
             }
         } catch (Exception e) {
@@ -209,7 +247,7 @@ public class RecipeController {
 
     // bookmark favourite
     @PostMapping("/recipe/bookmark")
-    public void bookmarkRecipe(@RequestParam(value = "recipeId") long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
+    public long bookmarkRecipe(@RequestParam(value = "recipeId") long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
         try {
             User user = userRepository.getOne(userId);
             Recipe recipe = recipeRepository.getOne(recipeId);
@@ -218,27 +256,35 @@ public class RecipeController {
                 recipeRepository.save(recipe);
                 System.out.println("bookmarked recipe");
                 response.setStatus(HttpServletResponse.SC_OK);
+                return 20;
+            } else {
+                userController.logUserOut(userId);
+                return 40;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            return 40;
         }
     }
 
     // delete bookmark
     @DeleteMapping("/recipe/deleteBookmark")
-    public void deleteBookmark(@RequestParam(value = "recipeId") long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
+    public long deleteBookmark(@RequestParam(value = "recipeId") long recipeId, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
         try {
             User user = userRepository.getOne(userId);
             Recipe recipe = recipeRepository.getOne(recipeId);
             if (userController.validateDurration(user)) {
                 recipe.setBookmark(false);
-//                user.deleteBookmark(recipe);
-//                userRepository.save(user);
                 recipeRepository.save(recipe);
                 response.setStatus(HttpServletResponse.SC_OK);
+                return 20;
+            } else {
+                userController.logUserOut(userId);
+                return 40;
             }
         } catch (Exception e) {
             log.error(e.getMessage());
+            return 40;
         }
     }
 }

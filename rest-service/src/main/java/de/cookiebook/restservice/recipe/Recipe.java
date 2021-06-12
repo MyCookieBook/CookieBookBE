@@ -82,18 +82,116 @@ public class Recipe {
     @Override
     public String toString() {
 
-        return "Recipe{" +
-                "id=" + this.id +
-                ", author='" + this.author + '\'' +
-                ", title='" + this.title + '\'' +
-                ", duration='" + this.duration + '\'' +
-                ", difficultyLevel=" + this.difficultyLevel +
-                ", steps='" + this.steps + '\'' +
-                ", link='" + this.link + '\'' +
-                ", ingredients='" + this.ingredients + '\'' +
-                ", material='" + this.material + '\'' +
-                ", calory='" + this.calory + '\'' +
-                '}';
+        String splitter = "&&&";
+        String attribute = "%%%";
+        String empty = "§§§";
+
+        String recipe = "";
+        if (this.id == null) {
+            recipe += empty;
+        } else {
+            recipe += this.id.toString();
+        }
+        recipe += splitter;
+        if (this.category == null || this.category.equals(Category.DEFAULT1)) {
+            recipe += empty;
+        } else {
+            recipe += this.category;
+        }
+        recipe += splitter;
+        if (this.subcategory == null) {
+            recipe += empty;
+        } else {
+            recipe += this.subcategory;
+        }
+        recipe += splitter;
+        if (this.title == null || this.title.equals("")) {
+            recipe += empty;
+        } else {
+            recipe += this.title;
+        }
+        recipe += splitter;
+        if (this.author == null || this.author.equals("")) {
+            recipe += empty;
+        } else {
+            recipe += this.author;
+        }
+        recipe += splitter;
+        if (this.bookmark) {
+            recipe += "true";
+        } else {
+            recipe += "false";
+        }
+        recipe += splitter;
+        if (this.duration == null) {
+            recipe += empty;
+        } else {
+            recipe += this.duration.toString();
+        }
+        recipe += splitter;
+        if (this.calory.equals("")) {
+            recipe += empty;
+        } else {
+            recipe += this.calory;
+        }
+        recipe += splitter;
+        if (this.difficultyLevel == 0) {
+            recipe += empty;
+        } else {
+            recipe += this.difficultyLevel.toString();
+        }
+        recipe += splitter;
+        if (this.ingredients == null || this.ingredients.size() == 0) {
+            recipe += empty;
+        } else {
+            for (int i = 0; i < this.ingredients.size(); i++) {
+                if (!this.ingredients.get(i).getIngredientName().equals("")) {
+                    recipe += this.ingredients.get(i).getIngredientName();
+                    if (i != this.ingredients.size() - 1) {
+                        recipe += attribute;
+                    }
+                }else if(this.ingredients.get(i).getIngredientName() == null){
+                    recipe += empty;
+                    break;
+                }
+            }
+        }
+        recipe += splitter;
+        if (this.material == null || this.material.size() == 0) {
+            recipe += empty;
+        } else {
+            for (int i = 0; i < this.material.size(); i++) {
+                recipe += this.material.get(i).getMaterialName();
+                if (i != this.material.size() - 1) {
+                    recipe += attribute;
+                }
+            }
+        }
+        recipe += splitter;
+        if (this.steps == null || this.steps.size() == 0) {
+            recipe += empty;
+        } else {
+            for (int i = 0; i < this.steps.size(); i++) {
+                recipe += this.steps.get(i).getStepName();
+                if (i != this.steps.size() - 1) {
+                    recipe += attribute;
+                }
+            }
+        }
+        recipe += splitter;
+        if (this.link == null || this.link.equals("")) {
+            recipe += empty;
+        } else {
+            recipe += this.link;
+        }
+        recipe += splitter;
+        if (this.other == null || this.other.equals("")) {
+            recipe += empty;
+        } else {
+            recipe += this.other;
+        }
+
+        return recipe;
     }
 }
 

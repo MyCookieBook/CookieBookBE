@@ -23,4 +23,9 @@ public class Ingredient {
     public Ingredient(String ingredientName) {
         this.ingredientName = ingredientName;
     }
+
+    @Override
+    public String toString() {
+        return this.ingredientName;
+    }
 }
