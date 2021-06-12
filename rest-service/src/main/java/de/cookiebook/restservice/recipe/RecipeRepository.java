@@ -1,19 +1,14 @@
 package de.cookiebook.restservice.recipe;
 
-import java.util.List;
-
-import de.cookiebook.restservice.ingredients.Ingredient;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.stereotype.Repository;
-
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static de.cookiebook.restservice.category.Category.*;
 import static de.cookiebook.restservice.category.Subcategory.*;
-import static de.cookiebook.restservice.category.Subcategory.DEFAULT;
 
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
@@ -87,7 +82,5 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findAllByMaterialMaterialNameContainingIgnoreCase(String term);
 
     List<Recipe> findAllByStepsStepNameContainingIgnoreCase(String term);
-
-
 
 }
