@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d22a921a-7953-4b75-8d5f-5d816a3fdf10" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/user/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +16,13 @@
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
     </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -41,6 +48,11 @@
     <property name="settings.editor.selected.configurable" value="preferences.externalDependencies" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="show.unlinked.gradle.project.popup" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="Applet" factoryName="Applet">
@@ -117,6 +129,10 @@
       <screen x="0" y="23" width="1280" height="745" />
     </state>
     <state x="104" y="57" width="1071" height="700" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1280.745@0.23.1280.745" timestamp="1623596359151" />
+    <state x="345" y="204" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1623601614892">
+      <screen x="0" y="23" width="1280" height="745" />
+    </state>
+    <state x="345" y="204" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1280.745@0.23.1280.745" timestamp="1623601614892" />
     <state width="1238" height="279" key="GridCell.Tab.0.bottom" timestamp="1623600364445">
       <screen x="0" y="23" width="1280" height="745" />
     </state>
