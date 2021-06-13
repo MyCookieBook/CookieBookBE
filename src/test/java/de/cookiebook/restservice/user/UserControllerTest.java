@@ -20,6 +20,7 @@ class UserControllerTest {
         // GIVEN
         User newuser = new User("new", "new");
         //newuser.setId();
+        long i = 5;
         List<User> userlist = new ArrayList<>(Collections.singletonList(new User("test", "test")));
         // WHEN
         when(userRepository.findAll()).thenReturn(userlist);
