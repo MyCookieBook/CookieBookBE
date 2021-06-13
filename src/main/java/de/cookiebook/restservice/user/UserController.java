@@ -45,7 +45,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "http://localhost:4200/login")
     @PostMapping("/users/login")
     public long loginUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
         log.info(email);
