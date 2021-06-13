@@ -1,0 +1,34 @@
+de/cookiebook/restservice/recipe/RecipeController.java
+ de.cookiebook.restservice.recipe.RecipeController
+de/cookiebook/restservice/user/UserRepository.java
+ de.cookiebook.restservice.user.UserRepository
+de/cookiebook/restservice/ingredients/Ingredient.java
+ de.cookiebook.restservice.ingredients.Ingredient
+de/cookiebook/restservice/materials/Material.java
+ de.cookiebook.restservice.materials.Material
+de/cookiebook/restservice/steps/StepRepository.java
+ de.cookiebook.restservice.steps.StepRepository
+de/cookiebook/restservice/ingredients/IngredientRepository.java
+ de.cookiebook.restservice.ingredients.IngredientRepository
+de/cookiebook/restservice/user/User.java
+ de.cookiebook.restservice.user.User
+de/cookiebook/restservice/config/AuthenticationConfigConstants.java
+ de.cookiebook.restservice.config.AuthenticationConfigConstants
+de/cookiebook/restservice/recipe/Recipe.java
+ de.cookiebook.restservice.recipe.Recipe
+de/cookiebook/restservice/materials/MaterialRepository.java
+ de.cookiebook.restservice.materials.MaterialRepository
+de/cookiebook/restservice/category/Subcategory.java
+ de.cookiebook.restservice.category.Subcategory
+de/cookiebook/restservice/category/Category.java
+ de.cookiebook.restservice.category.Category
+de/cookiebook/restservice/steps/Step.java
+ de.cookiebook.restservice.steps.Step
+de/cookiebook/restservice/user/UserController.java
+ de.cookiebook.restservice.user.UserController
+de/cookiebook/restservice/RestServiceApplication.java
+ de.cookiebook.restservice.RestServiceApplication
+de/cookiebook/restservice/recipe/RecipeRepository.java
+ de.cookiebook.restservice.recipe.RecipeRepository
+de/cookiebook/restservice/user/Status.java
+ de.cookiebook.restservice.user.Status
