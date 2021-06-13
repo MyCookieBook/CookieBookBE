@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +13,7 @@ class UserControllerTest {
 
     UserRepository userRepository = mock(UserRepository.class);
     private final UserController userController = new UserController(this.userRepository);
+
 
     @Test
     void registerUser_200() {
@@ -150,4 +150,4 @@ class UserControllerTest {
         //    void validateDurration() {
         //        assertEquals(0,0);
         //    }
-        //}
+        }
