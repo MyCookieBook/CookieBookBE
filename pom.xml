@@ -133,10 +133,5 @@
       <version>6.8.1</version>
       <scope>test</scope>
     </dependency>
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>org.springframework.web.servlet</artifactId>
-    <version>3.2.2.RElEASE</version>
-</dependency>
   </dependencies>
 </project>

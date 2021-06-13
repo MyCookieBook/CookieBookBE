@@ -7,6 +7,7 @@
     <list default="true" id="d22a921a-7953-4b75-8d5f-5d816a3fdf10" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/RestServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/RestServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/user/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/de/cookiebook/restservice/user/UserController.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
