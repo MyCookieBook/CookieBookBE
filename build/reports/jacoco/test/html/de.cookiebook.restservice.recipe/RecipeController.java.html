@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="de"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RecipeController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">rest-service</a> &gt; <a href="index.source.html" class="el_package">de.cookiebook.restservice.recipe</a> &gt; <span class="el_source">RecipeController.java</span></div><h1>RecipeController.java</h1><pre class="source lang-java linenums">package de.cookiebook.restservice.recipe;
+
+import de.cookiebook.restservice.category.Category;
+import de.cookiebook.restservice.category.Subcategory;
+import de.cookiebook.restservice.ingredients.Ingredient;
+import de.cookiebook.restservice.ingredients.IngredientRepository;
+import de.cookiebook.restservice.materials.MaterialRepository;
+import de.cookiebook.restservice.steps.StepRepository;
+import de.cookiebook.restservice.user.Status;
+import de.cookiebook.restservice.user.User;
+import de.cookiebook.restservice.user.UserController;
+import de.cookiebook.restservice.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+
+<span class="nc" id="L24">@Slf4j</span>
+@RestController
+@CrossOrigin(origins = &quot;http://localhost:4200&quot;)
+public class RecipeController {
+    RecipeRepository recipeRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    IngredientRepository ingredientRepository;
+
+    @Autowired
+    MaterialRepository materialRepository;
+
+    @Autowired
+    StepRepository stepRepository;
+
+<span class="nc" id="L42">    public RecipeController(RecipeRepository recipeRepository) {</span>
+<span class="nc" id="L43">        this.recipeRepository = recipeRepository;</span>
+<span class="nc" id="L44">    }</span>
+
+<span class="nc" id="L46">    @Autowired</span>
+    UserController userController = new UserController(userRepository);
+    // Add recipe
+
+    @PostMapping(&quot;/recipes/add&quot;)
+    public long addRecipe(@RequestBody Recipe recipe, @RequestParam(value = &quot;userId&quot;) long userId, HttpServletResponse response) {
+        try {
+            long id;
+<span class="nc" id="L54">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">                if (recipe.getId() == 0) {</span>
+<span class="nc" id="L57">                    ingredientRepository.saveAll(recipe.getIngredients());</span>
+<span class="nc" id="L58">                    materialRepository.saveAll(recipe.getMaterial());</span>
+<span class="nc" id="L59">                    stepRepository.saveAll(recipe.getSteps());</span>
+<span class="nc" id="L60">                    recipe.setUserId(userId);</span>
+<span class="nc" id="L61">                    recipeRepository.save(recipe);</span>
+<span class="nc" id="L62">                    List&lt;Recipe&gt; allRecipes = recipeRepository.findByUserId(userId);</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                    for (Recipe allRecipe : allRecipes) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                        if (allRecipe.getCategory().equals(recipe.getCategory()) &amp;&amp;</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">                                allRecipe.getDifficultyLevel().equals(recipe.getDifficultyLevel()) &amp;&amp;</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">                                allRecipe.getDuration().equals(recipe.getDuration()) &amp;&amp;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">                                allRecipe.getLink().equals(recipe.getLink()) &amp;&amp;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                                allRecipe.getTitle().equals(recipe.getTitle()) &amp;&amp;</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">                                allRecipe.getSubcategory().equals(recipe.getSubcategory()) &amp;&amp;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                                allRecipe.getAuthor().equals(recipe.getAuthor()) &amp;&amp;</span>
+<span class="nc bnc" id="L71" title="All 2 branches missed.">                                allRecipe.getCalory().equals(recipe.getCalory()) &amp;&amp;</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                                allRecipe.isBookmark() == (recipe.isBookmark()) &amp;&amp;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">                                allRecipe.getOther().equals(recipe.getOther()) &amp;&amp;</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                                allRecipe.getUserId() == (recipe.getUserId())</span>
+                        ) {
+<span class="nc" id="L76">                            id = allRecipe.getId();</span>
+<span class="nc" id="L77">                            return id;</span>
+                        }
+<span class="nc" id="L79">                    }</span>
+<span class="nc" id="L80">                    return 0;</span>
+                } else {
+
+<span class="nc" id="L83">                    recipe.setUserId(userId);</span>
+<span class="nc" id="L84">                    recipeRepository.save(recipe);</span>
+<span class="nc" id="L85">                    return recipe.getId();</span>
+                }
+            } else {
+<span class="nc" id="L88">                System.out.println(&quot;failed adding recipe&quot;);</span>
+<span class="nc" id="L89">                userController.logUserOut(userId);</span>
+<span class="nc" id="L90">                return 0;</span>
+            }
+<span class="nc" id="L92">        } catch (Exception e) {</span>
+<span class="nc" id="L93">            log.error(e.getMessage());</span>
+<span class="nc" id="L94">            return 0;</span>
+        }
+    }
+
+    // Delete recipe
+    @PostMapping(&quot;/recipes/delete&quot;)
+    public long deleteRecipe(@RequestParam(value = &quot;recipeId&quot;) long id, @RequestParam(value = &quot;userId&quot;) long userId, HttpServletResponse response) {
+        try {
+<span class="nc" id="L102">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                if (!recipeRepository.existsById(id)) {</span>
+<span class="nc" id="L105">                    response.setStatus(HttpServletResponse.SC_NOT_FOUND);</span>
+<span class="nc" id="L106">                    return 40;</span>
+                }
+<span class="nc" id="L108">                recipeRepository.deleteById(id);</span>
+<span class="nc" id="L109">                response.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="nc" id="L110">                return 20;</span>
+            } else {
+<span class="nc" id="L112">                userController.logUserOut(userId);</span>
+<span class="nc" id="L113">                return 40;</span>
+            }
+<span class="nc" id="L115">        } catch (Exception e) {</span>
+<span class="nc" id="L116">            log.error(e.getMessage());</span>
+<span class="nc" id="L117">            return 40;</span>
+        }
+    }
+
+    // implement find
+    @GetMapping(&quot;/recipeslist&quot;)
+    public List&lt;Recipe&gt; getRecipes(@RequestParam(value = &quot;userId&quot;) long userId) {
+        try {
+<span class="nc" id="L125">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L127">                return recipeRepository.findByUserId(userId);</span>
+            } else {
+<span class="nc" id="L129">                return null;</span>
+            }
+
+<span class="nc" id="L132">        } catch (Exception e) {</span>
+<span class="nc" id="L133">            log.error(e.getMessage());</span>
+<span class="nc" id="L134">            return null;</span>
+        }
+    }
+
+    @GetMapping(&quot;/recipeslist/favorite&quot;)
+    public List&lt;String&gt; getFavoriteRecipes(@RequestParam(value = &quot;userId&quot;) long userId) {
+        try {
+<span class="nc" id="L141">            User user = userRepository.findById(userId);</span>
+<span class="nc" id="L142">            List&lt;String&gt; favoriteRecipes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L144">                List&lt;Recipe&gt; allRecipes = recipeRepository.findByUserId(userId);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">                for (Recipe allRecipe : allRecipes) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                    if (allRecipe.isBookmark()) {</span>
+<span class="nc" id="L147">                        favoriteRecipes.add(allRecipe.toString());</span>
+                    }
+<span class="nc" id="L149">                }</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                if (favoriteRecipes.isEmpty()) {</span>
+<span class="nc" id="L151">                    return null;</span>
+                } else {
+<span class="nc" id="L153">                    return favoriteRecipes;</span>
+                }
+            } else {
+<span class="nc" id="L156">                return null;</span>
+            }
+<span class="nc" id="L158">        } catch (Exception e) {</span>
+<span class="nc" id="L159">            log.error(e.getMessage());</span>
+<span class="nc" id="L160">            return null;</span>
+        }
+    }
+
+    @GetMapping(value = &quot;/recipeslist/byCategory/{stringCategory}&quot;)
+    public List&lt;String&gt; getRecipesByCategory(@PathVariable String stringCategory, @RequestParam(value = &quot;userId&quot;) long userId) {
+        try {
+<span class="nc" id="L167">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L169">                List&lt;String&gt; recipes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L170">                Category category = recipeRepository.getCategory(stringCategory);</span>
+<span class="nc" id="L171">                List&lt;Recipe&gt; recipeList = recipeRepository.findAllByCategory(category);</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                for (Recipe recipe : recipeList) {</span>
+<span class="nc bnc" id="L173" title="All 2 branches missed.">                    if (recipe.getUserId() == userId) {</span>
+<span class="nc" id="L174">                        recipes.add(recipe.toString());</span>
+                    }
+<span class="nc" id="L176">                }</span>
+<span class="nc" id="L177">                return recipes;</span>
+            } else {
+<span class="nc" id="L179">                userController.logUserOut(userId);</span>
+<span class="nc" id="L180">                return null;</span>
+            }
+<span class="nc" id="L182">        } catch (Exception e) {</span>
+<span class="nc" id="L183">            log.error(e.getMessage());</span>
+<span class="nc" id="L184">            return null;</span>
+        }
+    }
+
+    @GetMapping(value = &quot;/recipeslist/bySubcategory/{stringSubcategory}&quot;)
+    public List&lt;String&gt; getRecipesBySubcategory(@PathVariable String stringSubcategory, @RequestParam(value = &quot;userId&quot;) long userId) {
+        try {
+<span class="nc" id="L191">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L193">                List&lt;String&gt; recipes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L194">                Subcategory subcategory = recipeRepository.getSubcategory(stringSubcategory);</span>
+<span class="nc" id="L195">                List&lt;Recipe&gt; recipeList = recipeRepository.findAllBySubcategory(subcategory);</span>
+<span class="nc bnc" id="L196" title="All 2 branches missed.">                for (Recipe recipe : recipeList) {</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">                    if (recipe.getUserId() == userId) {</span>
+<span class="nc" id="L198">                        recipes.add(recipe.toString());</span>
+                    }
+<span class="nc" id="L200">                }</span>
+<span class="nc" id="L201">                return recipes;</span>
+            } else {
+<span class="nc" id="L203">                userController.logUserOut(userId);</span>
+<span class="nc" id="L204">                return null;</span>
+            }
+<span class="nc" id="L206">        } catch (Exception e) {</span>
+<span class="nc" id="L207">            log.error(e.getMessage());</span>
+<span class="nc" id="L208">            return null;</span>
+        }
+    }
+
+    // find by Title
+    @GetMapping(value = &quot;/recipeslist/search&quot;)
+    public List&lt;String&gt; getAllByName(@RequestParam String term, @RequestParam(value = &quot;userId&quot;) long userId) {
+        try {
+            List&lt;Recipe&gt; returnRecipes;
+<span class="nc" id="L217">            List&lt;String&gt; recipeList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L218">            User user = userRepository.findById(userId);</span>
+<span class="nc bnc" id="L219" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L220">                returnRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);</span>
+<span class="nc" id="L221">                returnRecipes.addAll(recipeRepository.findAllByTitleContainingIgnoreCase(term));</span>
+<span class="nc" id="L222">                returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));</span>
+<span class="nc" id="L223">                returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));</span>
+<span class="nc" id="L224">                returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));</span>
+<span class="nc bnc" id="L225" title="All 2 branches missed.">                for (int i = 0; i &lt; returnRecipes.size(); i++) {</span>
+<span class="nc bnc" id="L226" title="All 2 branches missed.">                    if (returnRecipes.get(i).getUserId() != userId) {</span>
+<span class="nc" id="L227">                        returnRecipes.remove(i);</span>
+                    }
+                }
+<span class="nc" id="L230">                HashSet&lt;Recipe&gt; recipeHash = new HashSet&lt;Recipe&gt;(returnRecipes);</span>
+
+<span class="nc" id="L232">                Object[] object = recipeHash.toArray();</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">                for (Object o : object) {</span>
+<span class="nc" id="L234">                    recipeList.add(o.toString());</span>
+                }
+//                recipeList.sort();
+<span class="nc" id="L237">                return recipeList;</span>
+            } else {
+<span class="nc" id="L239">                userController.logUserOut(userId);</span>
+<span class="nc" id="L240">                return null;</span>
+            }
+<span class="nc" id="L242">        } catch (Exception e) {</span>
+<span class="nc" id="L243">            log.error(e.getMessage());</span>
+<span class="nc" id="L244">            return null;</span>
+        }
+    }
+
+    // bookmark favourite
+    @PostMapping(&quot;/recipe/bookmark&quot;)
+    public long bookmarkRecipe(@RequestParam(value = &quot;recipeId&quot;) long recipeId, @RequestParam(value = &quot;userId&quot;) long userId, HttpServletResponse response) {
+        try {
+<span class="nc" id="L252">            User user = userRepository.getOne(userId);</span>
+<span class="nc" id="L253">            Recipe recipe = recipeRepository.getOne(recipeId);</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L255">                recipe.setBookmark(true);</span>
+<span class="nc" id="L256">                recipeRepository.save(recipe);</span>
+<span class="nc" id="L257">                System.out.println(&quot;bookmarked recipe&quot;);</span>
+<span class="nc" id="L258">                response.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="nc" id="L259">                return 20;</span>
+            } else {
+<span class="nc" id="L261">                userController.logUserOut(userId);</span>
+<span class="nc" id="L262">                return 40;</span>
+            }
+<span class="nc" id="L264">        } catch (Exception e) {</span>
+<span class="nc" id="L265">            log.error(e.getMessage());</span>
+<span class="nc" id="L266">            return 40;</span>
+        }
+    }
+
+    // delete bookmark
+    @DeleteMapping(&quot;/recipe/deleteBookmark&quot;)
+    public long deleteBookmark(@RequestParam(value = &quot;recipeId&quot;) long recipeId, @RequestParam(value = &quot;userId&quot;) long userId, HttpServletResponse response) {
+        try {
+<span class="nc" id="L274">            User user = userRepository.getOne(userId);</span>
+<span class="nc" id="L275">            Recipe recipe = recipeRepository.getOne(recipeId);</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">            if (userController.validateDurration(user)) {</span>
+<span class="nc" id="L277">                recipe.setBookmark(false);</span>
+<span class="nc" id="L278">                recipeRepository.save(recipe);</span>
+<span class="nc" id="L279">                response.setStatus(HttpServletResponse.SC_OK);</span>
+<span class="nc" id="L280">                return 20;</span>
+            } else {
+<span class="nc" id="L282">                userController.logUserOut(userId);</span>
+<span class="nc" id="L283">                return 40;</span>
+            }
+<span class="nc" id="L285">        } catch (Exception e) {</span>
+<span class="nc" id="L286">            log.error(e.getMessage());</span>
+<span class="nc" id="L287">            return 40;</span>
+        }
+    }
+}
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
