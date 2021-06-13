@@ -116,20 +116,19 @@ class UserControllerTest {
         assertEquals(1, realList.size());
         assertEquals(userlist, realList);
     }
-
+/*
     @Test
     void getUser() {
         // GIVEN
-        User user = new User("mail", "password");
-        User newUser = userRepository.save(user);
-        //List<User> userlist = new ArrayList<>(Collections.singletonList(user));
+        User user = new User("mail@web.de", "password12");
+        List<User> userlist = new ArrayList<>(Collections.singletonList(user));
         // WHEN
-        //when(userRepository.findAll()).thenReturn(userlist);
-        //when(userController.getUser(user));
+        when(userRepository.findAll()).thenReturn(userlist);
+        when(userController.getUser(68));
         // THEN
-        String[] realUser = userController.getUser(newUser.getId());
-        assertEquals(realUser[0], "mail");
-        assertEquals(realUser[1], "password");
+        String[] realUser = userController.getUser(user.getId());
+        assertEquals(realUser[0], "mail@mail.de");
+        assertEquals(realUser[1], "password12");
     }
 /*
     @Test

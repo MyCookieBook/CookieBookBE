@@ -5,35 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d22a921a-7953-4b75-8d5f-5d816a3fdf10" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/resourceHashesCache.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/jarAnalysis.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/taskHistory.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/de/cookiebook/restservice/user/UserControllerTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/de/cookiebook/restservice/user/TestUserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/classAnalysis.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/category/Category.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/category/Category.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/category/Subcategory.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/category/Subcategory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/user/Status.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/main/de/cookiebook/restservice/user/Status.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/test/de/cookiebook/restservice/RestServiceApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/java/test/de/cookiebook/restservice/RestServiceApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/java/test/de/cookiebook/restservice/user/UserControllerTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/de.cookiebook.restservice.RestServiceApplicationTests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/classes/de.cookiebook.restservice.user.UserControllerTest.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/de.cookiebook.restservice.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/packages/de.cookiebook.restservice.user.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-de.cookiebook.restservice.RestServiceApplicationTests.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test-results/test/TEST-de.cookiebook.restservice.user.UserControllerTest.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/libs/rest-service-0.0.1-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/build/libs/rest-service-0.0.1-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/reports/tests/test/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/build/reports/tests/test/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/output.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/output.bin.idx" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/output.bin.idx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" beforeDir="false" afterPath="$PROJECT_DIR$/build/test-results/test/binary/results.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/tmp/compileTestJava/source-classes-mapping.txt" beforeDir="false" afterPath="$PROJECT_DIR$/build/tmp/compileTestJava/source-classes-mapping.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/de/cookiebook/restservice/user/UserControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/de/cookiebook/restservice/user/UserControllerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,21 +149,21 @@
       <screen x="0" y="23" width="1280" height="745" />
     </state>
     <state x="345" y="204" key="#com.intellij.fileTypes.FileTypeChooser/0.23.1280.745@0.23.1280.745" timestamp="1623601614892" />
-    <state width="1238" height="279" key="GridCell.Tab.0.bottom" timestamp="1623600364445">
+    <state width="1238" height="59" key="GridCell.Tab.0.bottom" timestamp="1623619531229">
       <screen x="0" y="23" width="1280" height="745" />
     </state>
-    <state width="1238" height="279" key="GridCell.Tab.0.bottom/0.23.1280.745@0.23.1280.745" timestamp="1623600364445" />
-    <state width="1238" height="279" key="GridCell.Tab.0.center" timestamp="1623600364444">
+    <state width="1238" height="59" key="GridCell.Tab.0.bottom/0.23.1280.745@0.23.1280.745" timestamp="1623619531229" />
+    <state width="1238" height="59" key="GridCell.Tab.0.center" timestamp="1623619531228">
       <screen x="0" y="23" width="1280" height="745" />
     </state>
-    <state width="1238" height="279" key="GridCell.Tab.0.center/0.23.1280.745@0.23.1280.745" timestamp="1623600364444" />
-    <state width="1238" height="279" key="GridCell.Tab.0.left" timestamp="1623600364444">
+    <state width="1238" height="59" key="GridCell.Tab.0.center/0.23.1280.745@0.23.1280.745" timestamp="1623619531228" />
+    <state width="1238" height="59" key="GridCell.Tab.0.left" timestamp="1623619531228">
       <screen x="0" y="23" width="1280" height="745" />
     </state>
-    <state width="1238" height="279" key="GridCell.Tab.0.left/0.23.1280.745@0.23.1280.745" timestamp="1623600364444" />
-    <state width="1238" height="279" key="GridCell.Tab.0.right" timestamp="1623600364445">
+    <state width="1238" height="59" key="GridCell.Tab.0.left/0.23.1280.745@0.23.1280.745" timestamp="1623619531228" />
+    <state width="1238" height="59" key="GridCell.Tab.0.right" timestamp="1623619531229">
       <screen x="0" y="23" width="1280" height="745" />
     </state>
-    <state width="1238" height="279" key="GridCell.Tab.0.right/0.23.1280.745@0.23.1280.745" timestamp="1623600364445" />
+    <state width="1238" height="59" key="GridCell.Tab.0.right/0.23.1280.745@0.23.1280.745" timestamp="1623619531229" />
   </component>
 </project>

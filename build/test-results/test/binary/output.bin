@@ -1,0 +1,15 @@
+U22:43:06.734 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+U22:43:06.744 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+R22:43:06.747 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+U22:43:06.751 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+U22:43:06.751 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+R22:43:06.752 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+U22:43:06.775 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+U22:43:06.776 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+T22:43:06.777 [Test worker] ERROR de.cookiebook.restservice.user.UserController - 40
+X22:43:06.794 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+R22:43:06.794 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+X22:43:06.794 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+R22:43:06.794 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+User Already exists!
+d22:43:06.800 [Test worker] WARN de.cookiebook.restservice.user.UserController - USER_ALREADY_EXISTS

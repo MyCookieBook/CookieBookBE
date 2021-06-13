@@ -2,3 +2,5 @@ de/cookiebook/restservice/RestServiceApplicationTests.java
  de.cookiebook.restservice.RestServiceApplicationTests
 cucumber/stepdefs/EditProfileStepDefs.java
  cucumber.stepdefs.EditProfileStepDefs
+de/cookiebook/restservice/user/UserControllerTest.java
+ de.cookiebook.restservice.user.UserControllerTest
