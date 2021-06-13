@@ -79,10 +79,6 @@ task writeNewPom {
     }.writeTo("pom.xml")
 }
 
-jacoco {
-    toolVersion = '0.8.6'
-}
-
 task codeCoverageReport(type: JacocoReport) {
     executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
 
@@ -93,8 +89,8 @@ task codeCoverageReport(type: JacocoReport) {
     reports {
         xml.enabled true
         xml.destination file("./report.xml")
-        html.enabled true
-        csv.enabled true
+        html.enabled false
+        csv.enabled false
     }
 }
 

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="de.cookiebook.restservice.user.UserControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-06-13T22:40:55" hostname="Zhibeks-MacBook-Pro.local" time="0.098">
+<testsuite name="de.cookiebook.restservice.user.UserControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-06-13T22:55:49" hostname="Zhibeks-MacBook-Pro.local" time="0.159">
   <properties/>
-  <testcase name="loginUser_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.084"/>
-  <testcase name="logUserOut_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.004"/>
-  <testcase name="registerUser_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.007"/>
-  <system-out><![CDATA[00:40:55.405 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
-00:40:55.416 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
-00:40:55.418 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
-00:40:55.422 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
-00:40:55.422 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
-00:40:55.423 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
-00:40:55.458 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
-00:40:55.458 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
-00:40:55.459 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
-00:40:55.460 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+  <testcase name="loginUser_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.137"/>
+  <testcase name="logUserOut_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.006"/>
+  <testcase name="registerUser_200()" classname="de.cookiebook.restservice.user.UserControllerTest" time="0.009"/>
+  <system-out><![CDATA[00:55:50.060 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+00:55:50.078 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+00:55:50.089 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+00:55:50.095 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+00:55:50.095 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+00:55:50.096 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+00:55:50.145 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+00:55:50.145 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+00:55:50.146 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+00:55:50.146 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
