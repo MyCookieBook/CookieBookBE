@@ -27,6 +27,9 @@ jobs:
 
       - name: Run Tests
         run : ./gradlew test
+        
+      - name: Build Coverage Report
+        run : ./gradlew codeCoverageReport
 
       - name: Build Project
         run: ./gradlew assemble
