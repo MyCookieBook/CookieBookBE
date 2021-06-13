@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @Slf4j
-//@CrossOrigin(origins = "http://mycookiebook.ddns.net")
+@CrossOrigin
 public class UserController {
     @Autowired
     UserRepository userRepository;
