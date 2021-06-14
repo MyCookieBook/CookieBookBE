@@ -213,18 +213,19 @@ public class RecipeController {
     @GetMapping(value = "/recipeslist/search")
     public List<String> getAllByName(@RequestParam String term, @RequestParam(value = "userId") long userId) {
         try {
-            List<Recipe> returnRecipes;
+            List<Recipe> foundRecipes;
+            List<Recipe> returnRecipes = new ArrayList<Recipe>();
             List<String> recipeList = new ArrayList<>();
             User user = userRepository.findById(userId);
             if (userController.validateDurration(user)) {
-                returnRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);
-                returnRecipes.addAll(recipeRepository.findAllByTitleContainingIgnoreCase(term));
-                returnRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
-                returnRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
-                returnRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
-                for (int i = 0; i < returnRecipes.size(); i++) {
-                    if (returnRecipes.get(i).getUserId() != userId) {
-                        returnRecipes.remove(i);
+                foundRecipes = recipeRepository.findAllByIngredientsIngredientNameContainingIgnoreCase(term);
+                foundRecipes.addAll(recipeRepository.findAllByTitleContainingIgnoreCase(term));
+                foundRecipes.addAll(recipeRepository.findAllByOtherContainingIgnoreCase(term));
+                foundRecipes.addAll(recipeRepository.findAllByMaterialMaterialNameContainingIgnoreCase(term));
+                foundRecipes.addAll(recipeRepository.findAllByStepsStepNameContainingIgnoreCase(term));
+                for (int i = 0; i < foundRecipes.size(); i++) {
+                    if (foundRecipes.get(i).getUserId() == userId) {
+                        returnRecipes.add(foundRecipes.get(i));
                     }
                 }
                 HashSet<Recipe> recipeHash = new HashSet<Recipe>(returnRecipes);
