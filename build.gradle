@@ -12,6 +12,7 @@ sourceCompatibility = '1.8'
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -60,6 +61,11 @@ test {
 	useJUnitPlatform()
 }
 
+jacoco {
+    toolVersion = "0.8.5"
+    reportsDir = file("$buildDir/jacoco")
+}
+
 task writeNewPom {
     pom {
         project {
@@ -79,21 +85,22 @@ task writeNewPom {
     }.writeTo("pom.xml")
 }
 
-task codeCoverageReport(type: JacocoReport) {
-    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
-
-    subprojects.each {
-        sourceSets it.sourceSets.main
-    }
-
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
     reports {
         xml.enabled true
-        xml.destination file("./report.xml")
         html.enabled false
         csv.enabled false
     }
 }
 
-codeCoverageReport.dependsOn {
-    subprojects*.test
+task codeCoverageReport(type: JacocoReport) {
+    reports {
+        xml.enabled true
+        html.enabled false
+        csv.enabled false
+    }
 }
