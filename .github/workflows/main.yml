@@ -35,6 +35,8 @@ jobs:
         run: ./gradlew assemble
 
       - name: Upload to Codecov.io
+        env:
+          CODECOV_TOKEN: e0c1b68e-a6ba-445a-a32e-8e88fcec0d86
         shell: bash
         run: |
           bash <(curl -s https://codecov.io/bash)
