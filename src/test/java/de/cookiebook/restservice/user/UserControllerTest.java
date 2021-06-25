@@ -1,183 +1,323 @@
 package de.cookiebook.restservice.user;
 
-import de.cookiebook.restservice.config.AuthenticationConfigConstants;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import java.sql.Timestamp;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
-@RestController
-@Slf4j
-@CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-    @Autowired
-    UserRepository userRepository;
+public class UserControllerTest {
 
-    @PostMapping("/users/register")
-    public long registerUser(@Valid @RequestBody User newUser) {
-        try {
-            List<User> users = userRepository.findAll();
-            for (User user : users) {
-                if ((user.getEmail()).equals(newUser.getEmail())) {
-                    System.out.println("User Already exists!");
-                    log.warn(Status.USER_ALREADY_EXISTS.toString());
-                    return Status.USER_ALREADY_EXISTS.getStatuscode();
-                }
-            }
-            newUser.setDuration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
-            userRepository.save(newUser);
-            log.info(Status.SUCCESS.toString());
-            log.info(String.valueOf(newUser.getId()));
-            return newUser.getId();
-        } catch (Exception e) {
-            log.error("failed register user");
-            log.error(e.getMessage());
-            return Status.FAILURE.getStatuscode();
-        }
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private HttpServletResponse httpServletResponse;
+
+    @InjectMocks
+    private UserController userController;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
     }
 
-    @CrossOrigin(origins = "http://localhost:4200/login")
-    @PostMapping("/users/login")
-    public long loginUser(@RequestParam(value = "email") String email, @RequestParam(value = "password") String password) {
-        log.info(email);
-        log.info(password);
-        try {
-            List<User> users = userRepository.findAll();
-            for (User other : users) {
-                if ((other.getEmail()).equals(email) && (other.getPassword()).equals(password)) {
-                    log.info(String.valueOf(other.getId()));
-                    other.setLoggedIn(true);
-                    other.setDuration(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME));
-                    userRepository.save(other);
-                    return other.getId();
-                }
-            }
-            log.error(String.valueOf(Status.FAILURE.getStatuscode()));
-            return Status.FAILURE.getStatuscode();
-        } catch (Exception e) {
-            log.error("failed log in user");
-            log.error(e.getMessage());
-            return Status.FAILURE.getStatuscode();
-        }
+    @Test
+    public void testRegisterUser_SUCCESS() {
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(new User("user1@email.com", "user1_password"));
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long userId = userController.registerUser(stubUser);
+        // Assert
+        assertEquals(1, userId);
     }
 
-    @PostMapping("/users/logout")
-    public long logUserOut(@RequestParam(value = "userId") long userId) {
-        List<User> users = userRepository.findAll();
-        for (User other : users) {
-            if (other.getId() == userId) {
-                other.setLoggedIn(false);
-                other.setDuration(null);
-                userRepository.save(other);
-                return Status.SUCCESS.getStatuscode();
-            }
-        }
-        return Status.FAILURE.getStatuscode();
+    @Test
+    public void testRegisterUser_USER_ALREADY_EXISTS() {
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.registerUser(stubUser);
+        // Assert
+        assertEquals(41, statusCode);
     }
 
-    @GetMapping("/userlist")
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    @Test
+    public void testRegisterUser_EXCEPTION() {
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(1);
+        when(userRepository.findAll()).thenThrow(new IllegalArgumentException("test exception"));
+        // Act
+        long statusCode = userController.registerUser(stubUser);
+        // Assert
+        assertEquals(40, statusCode);
     }
 
-    @GetMapping("/user")
-    public String[] getUser(@RequestParam(value = "UserId") long userId) {
-        try {
-            String[] userArray = new String[2];
-            List<User> userlist = userRepository.findAll();
-            for (User user : userlist) {
-                if (user.getId() == userId) {
-                    if (validateDurration(user)) {
-                        userArray[0] = user.getEmail();
-                        userArray[1] = user.getUsername();
-                        return userArray;
-                    } else {
-                        return null;
-                    }
-                }
-            }
-            return null;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return null;
-        }
+    @Test
+    public void testLoginUser_SUCCESS() {
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long userId = userController.loginUser("user1@email.com", "user1_password");
+        // Assert
+        assertEquals(1, userId);
     }
 
-    public boolean validateDurration(User user) {
-        try {
-            Date expiration = user.getDuration();
-            Date time = new Timestamp(System.currentTimeMillis());
-            if (!time.before(expiration)) {
-                logUserOut(user.getId());
-                return false;
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return false;
-        }
+    @Test
+    public void testLoginUser_USER_INVALID() {
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.loginUser("user2@email.com", "user2_password");
+        // Assert
+        assertEquals(40, statusCode);
     }
 
-    // edit profile
-    @PostMapping("/users/edit")
-    public long editProfile(@Valid @RequestBody User user) {
-        try {
-            User userBefore = userRepository.findById(user.getId());
-            if (validateDurration(userBefore)) {
-                if (user.getPassword() == null) {
-                    user.setPassword(userBefore.getPassword());
-                }
-                if (user.getEmail() == null) {
-                    user.setEmail(userBefore.getEmail());
-                }
-                if (user.getUsername() == null) {
-                    user.setUsername(userBefore.getUsername());
-                }
-                user.setLoggedIn(true);
-                user.setDuration(userBefore.getDuration());
-                userRepository.save(user);
-                System.out.println(user);
-                return Status.SUCCESS.getStatuscode();
-            } else {
-                return Status.FAILURE.getStatuscode();
-            }
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return Status.FAILURE.getStatuscode();
-        }
+    @Test
+    public void testLoginUser_EXCEPTION() {
+        // Arrange
+        when(userRepository.findAll()).thenThrow(new IllegalArgumentException("test exception"));
+        // Act
+        long statusCode = userController.loginUser("user1@email.com", "user1_password");
+        // Assert
+        assertEquals(40, statusCode);
     }
 
-    @PostMapping("/users/changePassword")
-    public long changePassword(@Valid @RequestBody User user, @RequestParam(value = "newPassword") String newPassword, HttpServletResponse response) {
-        try {
-            List<User> users = userRepository.findAll();
-            for (User other : users) {
-                if (other.getEmail().equals(user.getEmail()) && other.getId() == user.getId()) {
-                    if (validateDurration(other)) {
-                        user.setPassword(newPassword);
-                        user.setLoggedIn(true);
-                        user.setDuration(other.getDuration());
-                        userRepository.save(user);
-                        return Status.SUCCESS.getStatuscode();
-                    } else {
-                        return Status.FAILURE.getStatuscode();
-                    }
-                }
-            }
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            return Status.FAILURE.getStatuscode();
-
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            return Status.FAILURE.getStatuscode();
-        }
+    @Test
+    public void testLogoutUser_SUCCESS() {
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.logUserOut(1);
+        // Assert
+        assertEquals(20, statusCode);
     }
+
+    @Test
+    public void testLogoutUser_FAILURE() {
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.logUserOut(2);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
+    @Test
+    public void testGetUsers(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        // Act
+        List<User> users = userController.getUsers();
+        // Assert
+        assertNotNull(users);
+        assertEquals(1, users.size());
+        assertNotNull(users.get(0));
+        assertEquals(1, users.get(0).getId());
+        assertEquals("user1@email.com", users.get(0).getEmail());
+        assertEquals("user1_password", users.get(0).getPassword());
+    }
+
+    @Test
+    public void testGetUser_SUCCESS(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        stubUser.setUsername("user1");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        // Act
+        String[] users = userController.getUser(1);
+        // Assert
+        assertNotNull(users);
+        assertEquals(2, users.length);
+        assertEquals("user1@email.com", users[0]);
+        assertEquals("user1", users[1]);
+    }
+
+    @Test
+    public void testGetUser_INVALID_USER(){
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(1);
+        stubUser.setUsername("user2");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        List<User> listOfStubUser = Collections.singletonList(new User("user1@email.com", "user1_password"));
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        // Act
+        String[] users = userController.getUser(2);
+        // Assert
+        assertNull(users);
+    }
+
+    @Test
+    public void testGetUser_INVALID_DURATION(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        stubUser.setUsername("user1");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() - 10000000));
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        // Act
+        String[] users = userController.getUser(1);
+        // Assert
+        assertNull(users);
+    }
+
+    @Test
+    public void testGetUser_EXCEPTION(){
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(1);
+        stubUser.setUsername("user2");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        when(userRepository.findAll()).thenThrow(new IllegalArgumentException("test exception"));
+        // Act
+        String[] users = userController.getUser(1);
+        // Assert
+        assertNull(users);
+    }
+
+    @Test
+    public void testEditProfile_SUCCESS(){
+        // Arrange
+        User stubUser = new User("user@email.com", "password");
+        stubUser.setId(1);
+        stubUser.setUsername("user");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        User newStubUser = new User(null, null);
+        when(userRepository.findById(anyInt())).thenReturn(stubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.editProfile(newStubUser);
+        // Assert
+        assertEquals(20, statusCode);
+    }
+
+    @Test
+    public void testEditProfile_INVALID_DURATION(){
+        // Arrange
+        User stubUser = new User("user@email.com", "password");
+        stubUser.setId(1);
+        stubUser.setUsername("user");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() - 10000000));
+        User newStubUser = new User(null, null);
+        when(userRepository.findById(anyInt())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.editProfile(newStubUser);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
+    @Test
+    public void testEditProfile_EXCEPTION(){
+        // Arrange
+        User stubUser = new User("user@email.com", "password");
+        stubUser.setId(1);
+        stubUser.setUsername("user");
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() - 10000000));
+        User newStubUser = new User(null, null);
+        when(userRepository.findById(anyInt())).thenThrow(new IllegalArgumentException("test exception"));
+        // Act
+        long statusCode = userController.editProfile(newStubUser);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
+    @Test
+    public void testChangePassword_SUCCESS(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.changePassword(stubUser, "new_password", httpServletResponse);
+        // Assert
+        assertEquals(20, statusCode);
+    }
+
+    @Test
+    public void testChangePassword_INVALID_USER(){
+        // Arrange
+        User stubUser = new User("user2@email.com", "user2_password");
+        stubUser.setId(2);
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() + 10000000));
+        List<User> listOfStubUser = Collections.singletonList(new User("user1@email.com", "user1_password"));
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.changePassword(stubUser, "new_password", httpServletResponse);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
+    @Test
+    public void testChangePassword_INVALID_DURATION(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() - 10000000));
+        List<User> listOfStubUser = Collections.singletonList(stubUser);
+        when(userRepository.findAll()).thenReturn(listOfStubUser);
+        when(userRepository.save(any())).thenReturn(stubUser);
+        // Act
+        long statusCode = userController.changePassword(stubUser, "new_password", httpServletResponse);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
+    @Test
+    public void testChangePassword_Exception(){
+        // Arrange
+        User stubUser = new User("user1@email.com", "user1_password");
+        stubUser.setId(1);
+        stubUser.setDuration(new Timestamp(System.currentTimeMillis() - 10000000));
+        when(userRepository.findAll()).thenThrow(new IllegalArgumentException("test exception"));
+        // Act
+        long statusCode = userController.changePassword(stubUser, "new_password", httpServletResponse);
+        // Assert
+        assertEquals(40, statusCode);
+    }
+
 }
