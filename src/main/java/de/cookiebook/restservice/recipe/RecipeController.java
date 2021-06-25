@@ -2,29 +2,27 @@ package de.cookiebook.restservice.recipe;
 
 import de.cookiebook.restservice.category.Category;
 import de.cookiebook.restservice.category.Subcategory;
-import de.cookiebook.restservice.ingredients.Ingredient;
 import de.cookiebook.restservice.ingredients.IngredientRepository;
 import de.cookiebook.restservice.materials.MaterialRepository;
 import de.cookiebook.restservice.steps.StepRepository;
-import de.cookiebook.restservice.user.Status;
 import de.cookiebook.restservice.user.User;
 import de.cookiebook.restservice.user.UserController;
 import de.cookiebook.restservice.user.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
 public class RecipeController {
+
+    @Autowired
     RecipeRepository recipeRepository;
 
     @Autowired
@@ -39,14 +37,10 @@ public class RecipeController {
     @Autowired
     StepRepository stepRepository;
 
-    public RecipeController(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
-    }
-
     @Autowired
-    UserController userController = new UserController(userRepository);
-    // Add recipe
+    UserController userController;
 
+    // Add recipe
     @PostMapping("/recipes/add")
     public long addRecipe(@RequestBody Recipe recipe, @RequestParam(value = "userId") long userId, HttpServletResponse response) {
         try {
@@ -288,4 +282,3 @@ public class RecipeController {
         }
     }
 }
-	
