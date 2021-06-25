@@ -12,9 +12,10 @@ import static org.junit.Assert.assertEquals;
 @SpringBootTest
 class RestServiceApplicationTests {
 
-//	@Test
-//	void contextLoads() {
+	@Test
+	void contextLoads() {
 //		Assertions.assertEquals(1,1);
-//	}
+	}
 
 }
+
