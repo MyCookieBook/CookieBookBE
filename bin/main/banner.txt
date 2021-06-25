@@ -1,0 +1,17 @@
+${AnsiColor.BRIGHT_RED}
+
+  ,__ __             ___               _              , __               _
+ /|  |  |           / (_)             | |   o        /|/  \             | |
+  |  |  |          |       __    __   | |        _    | __/  __    __   | |
+  |  |  |   |   |  |      /  \_ /  \_ |/_)  |   |/    |   \ /  \_ /  \_ |/_)
+  |  |  |_/  \_/|/  \___/ \__/  \__/  | \_/ |_/ |__/  |(__/ \__/  \__/  | \_/
+               /|
+               \|
+
+${AnsiColor.WHITE}
+------------------------------------------------------------------------
+Project Name: ${project.name}
+Spring Boot Version: ${spring-boot.version}
+Spring Boot Formatted Version: ${spring-boot.formatted-version}
+Swagger UI: http://localhost:${server.port} ${server.servlet.context-path}/swagger-ui.html
+------------------------------------------------------------------------

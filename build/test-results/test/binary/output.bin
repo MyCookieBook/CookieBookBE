@@ -1,0 +1,10 @@
+U23:01:15.748 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+U23:01:15.761 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+R23:01:15.764 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+U23:01:15.768 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+U23:01:15.769 [Test worker] INFO de.cookiebook.restservice.user.UserController - test
+R23:01:15.771 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+X23:01:15.815 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+R23:01:15.815 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
+X23:01:15.816 [Test worker] INFO de.cookiebook.restservice.user.UserController - SUCCESS
+R23:01:15.817 [Test worker] INFO de.cookiebook.restservice.user.UserController - 0
